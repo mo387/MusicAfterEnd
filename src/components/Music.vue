@@ -40,13 +40,13 @@ export default {
   },
   computed: {
     songname () {
-      return this.songlist[this.$store.state.songindex].songname
+      return this.$store.state.songlist[this.$store.state.songindex].songname
     },
     singer () {
-      return this.songlist[this.$store.state.songindex].singer
+      return this.$store.state.songlist[this.$store.state.songindex].singer
     },
     img () {
-      return this.songlist[this.$store.state.songindex].img
+      return this.$store.state.songlist[this.$store.state.songindex].img
     }
   }
 }

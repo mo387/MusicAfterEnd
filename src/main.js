@@ -4,5 +4,7 @@ import router from './router'
 import store from './store'
 import './assets/css/base.css'
 import './assets/css/iconfont/iconfont.css'
-
-createApp(App).use(store).use(router).mount('#app')
+import axios from './axios/index'
+const app = createApp(App)
+app.config.globalProperties.$http = axios
+app.use(store).use(router).mount('#app')

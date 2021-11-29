@@ -14,7 +14,7 @@
         <a href="#" v-for="item in content" :key="item">
           <list
             text="独家推送独家推送推送"
-            number="1111111111111111"
+            number="111111"
             singer="22222"
             :leng="size"
             :ifplay="play"
@@ -73,9 +73,6 @@ export default {
       type: String,
       default: 'iconfont icon-bofang add'
     }
-  },
-  mounted () {
-    console.log('加载了' + typeof (this.play))
   }
 }
 </script>

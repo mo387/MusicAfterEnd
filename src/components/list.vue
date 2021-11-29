@@ -108,9 +108,6 @@ export default {
     singer_posi () {
       return this.singer_position + ':0'
     }
-  },
-  mounted () {
-    console.log(this.show)
   }
 }
 </script>

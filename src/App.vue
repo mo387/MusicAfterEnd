@@ -6,6 +6,7 @@
         <a href="#" @click="sure">不舍得</a>
       </button>
     </div>
+    <Login />
     <!-- 顶部 -->
     <div class="top">
       <!-- logo -->
@@ -31,6 +32,15 @@
           <i class="iconfont icon-yuyin"></i>
         </div>
       </a>
+      <!-- 注册登录 -->
+      <div class="login">
+        <a href="#" @click.prevent="loginHand">
+          <div class="hand"></div>
+        </a>
+        <div class="text">
+          <a href="#" @click.prevent="loginText">{{logintext}}</a>
+        </div>
+      </div>
       <!-- 基础图标功能 -->
       <a href="#" @click.prevent>
         <div class="listen">
@@ -68,8 +78,8 @@
     </div>
     <!-- 底部 -->
     <div class="bottom">
-      <player :playList="playlist" />
-      <music :songlist="playlist" />
+      <player :playList="this.$store.state.songlist" />
+      <music />
       <a href="#" @click.prevent @mouseover.prevent>
         <div class="smallicon" style="right:140px">
           <i class="iconfont icon-yinxiao" style="font-size:24px;color:#666"></i>
@@ -106,6 +116,7 @@
 </template>
 
 <script>
+import Login from './components/login.vue'
 import Music from './components/Music.vue'
 import Player from './components/player.vue'
 import SongList from './components/songList.vue'
@@ -113,11 +124,6 @@ import tab from './components/tab.vue'
 export default {
   data () {
     return {
-      playlist: [
-        { songname: '可惜没如果', url: require('@/assets/music/勇气.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
-        { songname: '醉赤壁', url: require('@/assets/music/锦鲤抄.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
-        { songname: '瞬き（无对白）', url: require('@/assets/music/火力全开.mp3'), singer: '春茶', img: require('@/assets/image/temp.webp') },
-        { songname: '关键词', url: require('@/assets/music/马步谣.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') }],
       Basic: [{
         content: '发现音乐',
         route: '/found'
@@ -178,7 +184,6 @@ export default {
         icon: 'iconfont icon-shezhi',
         left: 'right:180px',
         fn () {
-          console.log(1)
         }
       }, {
         icon: 'iconfont icon-fasongxinxi',
@@ -191,28 +196,38 @@ export default {
         left: 'right:100px',
         fn () {
           const tip = document.getElementById('__tip__')
-          tip.style.opacity = '1'
+          setTimeout(() => {
+            tip.style.opacity = '1'
+          }, 100)
+          tip.style.zIndex = '10'
         }
       }, {
         icon: 'iconfont icon-zuidahua',
         left: 'right:60px',
         fn () {
           const tip = document.getElementById('__tip__')
-          tip.style.opacity = '1'
+          setTimeout(() => {
+            tip.style.opacity = '1'
+          }, 100)
+          tip.style.zIndex = '10'
         }
       }, {
         icon: 'iconfont icon-cuowuguanbiquxiao',
         left: 'right:20px',
         fn () {
           const tip = document.getElementById('__tip__')
-          tip.style.opacity = '1'
+          setTimeout(() => {
+            tip.style.opacity = '1'
+          }, 100)
+          tip.style.zIndex = '10'
         }
       }],
       isshow: false,
       opacity: 'opacity:0',
       slide: 'height:73px',
       tip: 'opacity:0',
-      listshow: ''
+      listshow: '',
+      logintext: '您还未登录'
     }
   },
   methods: {
@@ -255,11 +270,42 @@ export default {
     sure () {
       const tip = document.getElementById('__tip__')
       tip.style.opacity = '0'
+      setTimeout(() => {
+        tip.style.zIndex = '-10'
+      }, 300)
+    },
+    loginHand () {
+      if (!this.$store.state.islogin) {
+        this.showlogin()
+      }
+    },
+    loginText () {
+      if (!this.$store.state.islogin) {
+        this.showlogin()
+      }
+    },
+    showlogin () {
+      const login = document.getElementById('Login')
+      login.style.display = 'block'
+      setTimeout(() => {
+        login.style.opacity = '1'
+        login.style.transform = 'translate(-50%, -50%)'
+      }, 50)
     }
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList }
+  components: { tab, Player, Music, SongList, Login },
+  mounted () {
+    // const songlist = localStorage.getItem('songlist')
+    // if (songlist === '') {
+    //   localStorage.setItem('songlist', JSON.stringify([]))
+    // } else {
+    //   console.log('进来了')
+    //   console.log('有缓存')
+    //   this.$store.commit('set_songlist', songlist)
+    // }
+  }
 
 }
 </script>
@@ -485,6 +531,7 @@ export default {
   font-size: 26px;
   opacity: 0;
   transition: 0.3s all ease-in-out;
+  z-index: -10;
 }
 .tip button {
   position: absolute;
@@ -498,5 +545,33 @@ export default {
   color: white;
   font-size: 20px;
   display: block;
+}
+.login {
+  height: 80%;
+  width: 200px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 18%;
+}
+.login .hand {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 25px;
+  background-color: #fff;
+}
+.login .text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(5% + 46px);
+}
+.login .text a {
+  color: #ccc;
+  font-size: 16px;
 }
 </style>
