@@ -1,18 +1,43 @@
 <template>
   <div class="music">
-    <a href="#">
-      <div class="pic">
-        <img :src="img" :alt="singer" />
-      </div>
-    </a>
-    <div class="title">
-      {{songname}}
-      <a href="#">
-        <i class="iconfont icon-xihuan add" @click.prevent="like" :style="love"></i>
+    <div class="front" id="music_front">
+      <a href="#" @click.prevent="showdetail">
+        <div class="pic">
+          <img :src="img" :alt="singer" />
+        </div>
       </a>
+      <div class="title" @click.prevent="showdetail">
+        <a href="#" class="name">{{songname}}</a>
+        &nbsp;
+        <a href="#">
+          <i class="iconfont icon-xihuan add" @click.stop="like" :style="love"></i>
+        </a>
+      </div>
+      <div class="singer">
+        <a href="#">{{singer}}</a>
+      </div>
     </div>
-    <div class="singer">
-      <a href="#">{{singer}}</a>
+    <div class="back" id="music_back">
+      <div class="icon">
+        <a href="#" title="加入喜欢">
+          <i class="iconfont icon-woxihuande"></i>
+        </a>
+      </div>
+      <div class="icon">
+        <a href="#" title="收藏">
+          <i class="iconfont icon-24gl-folderHeart"></i>
+        </a>
+      </div>
+      <div class="icon">
+        <a href="#" title="下载">
+          <i class="iconfont icon-xiazai"></i>
+        </a>
+      </div>
+      <div class="icon">
+        <a href="#" title="分享">
+          <i class="iconfont icon-fenxiang"></i>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +51,19 @@ export default {
       } else {
         this.love = 'color: white;-webkit-text-stroke: 1px #000'
       }
+    },
+    showdetail () {
+      const front = document.getElementById('music_front')
+      const back = document.getElementById('music_back')
+      const detail = document.getElementById('detail')
+      const xia = document.getElementById('xia')
+      detail.style.top = '0'
+      xia.style.transform = 'rotate(90deg)'
+      front.style.transform = 'rotateX(180deg)'
+      back.style.transform = 'rotateX(0)'
+      setTimeout(() => {
+        this.$store.commit('set_color', 'color:#000')
+      }, 600)
     }
   },
   props: {
@@ -58,11 +96,34 @@ export default {
   height: calc(100% - 20px);
   position: absolute;
   user-select: none;
+  z-index: 22;
 }
-.music a {
+.back,
+.front {
+  width: 100%;
+  height: 100%;
+  transition: 1s all ease-in-out;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* .music:hover .back {
+  transform: rotateX(0);
+}
+.music:hover .front {
+  transform: rotateX(180deg);
+} */
+.front a {
   display: block;
   width: 0;
   height: 0;
+}
+.back {
+  transform: rotateX(-180deg);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 .pic {
   height: 58px;
@@ -131,5 +192,18 @@ export default {
   white-space: nowrap;
   overflow-x: auto;
   width: 100px;
+}
+.icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 25px;
+  border: 1px solid #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon a i {
+  color: #999;
+  font-size: 20px;
 }
 </style>

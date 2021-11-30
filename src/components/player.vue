@@ -41,20 +41,24 @@ export default {
       if (audio.paused) {
         audio.play()
         this.play = 'iconfont icon-24gf-pause2'
+        this.$store.commit('set_play', true)
       } else {
         audio.pause()
         this.play = 'iconfont icon-bofang'
+        this.$store.commit('set_play', false)
       }
     },
     next () {
       this.play = 'iconfont icon-24gf-pause2'
       const audio = this.$refs.audio
       audio.pause()
+      this.$store.commit('set_play', false)
       this.songindex = (this.songindex + 1) % this.playList.length
       this.$store.commit('set_song', this.songindex)
       audio.src = this.playList[this.songindex].url
       this.init()
       audio.play()
+      this.$store.commit('set_play', true)
     },
     init () {
       this.current = '00:00'
@@ -67,11 +71,13 @@ export default {
       this.play = 'iconfont icon-24gf-pause2'
       const audio = this.$refs.audio
       audio.pause()
+      this.$store.commit('set_play', false)
       this.songindex = (this.songindex - 1 + this.playList.length) % this.playList.length
       audio.src = this.playList[this.songindex].url
       this.$store.commit('set_song', this.songindex)
       this.init()
       audio.play()
+      this.$store.commit('set_play', true)
     },
     change () {
       this.index = (this.index + 1) % this.list.length
@@ -83,11 +89,13 @@ export default {
         this.$store.commit('set_song', this.songindex)
         audio.src = this.playList[this.songindex].url
         audio.play()
+        this.$store.commit('set_play', true)
       }
       const second = function single () {
         const audio = this.$refs.audio
         this.init()
         audio.play()
+        this.$store.commit('set_play', true)
       }
       const third = function random () {
         const audio = this.$refs.audio
@@ -101,6 +109,7 @@ export default {
         this.$store.commit('set_song', this.songindex)
         audio.src = this.playList[this.songindex].url
         audio.play()
+        this.$store.commit('set_play', true)
       }
       const forth = function lie () {
         const audio = this.$refs.audio
@@ -110,6 +119,7 @@ export default {
           this.$store.commit('set_song', this.songindex)
           audio.src = this.playList[this.songindex].url
           audio.play()
+          this.$store.commit('set_play', true)
         }
       }
       switch (this.index) {
@@ -194,6 +204,7 @@ export default {
       this.songindex = (this.songindex + 1) % this.playList.length
       audio.src = this.playList[this.songindex].url
       audio.play()
+      this.$store.commit('set_play', true)
     }
   }
 }

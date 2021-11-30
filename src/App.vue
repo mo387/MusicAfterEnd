@@ -12,46 +12,54 @@
       <!-- logo -->
       <img src="@\assets\image\musiclogo.png" class="image" />
       <!-- 路由控制 -->
-      <a href="#" @click.prevent="this.$router.back">
-        <div class="route" style="left:340px">
-          <i class="iconfont icon-xiangzuo_fanhui" style="color:white;font-size:18px"></i>
-        </div>
-      </a>
-      <a href="#" @click.prevent="this.$router.forward">
-        <div class="route" style="left:400px">
-          <i class="iconfont icon-xiangyou_fanhui" style="color:white;font-size:18px"></i>
-        </div>
-      </a>
-      <!-- 输入搜索框 -->
-      <div class="input">
-        <i class="iconfont icon-sousuo" style="color:#ffffff99"></i>
-        <input type="text" placeholder="搜索" v-model.lazy="search" />
-      </div>
-      <a href="#" @click.prevent>
-        <div class="listen">
-          <i class="iconfont icon-yuyin"></i>
-        </div>
-      </a>
-      <!-- 注册登录 -->
-      <div class="login">
-        <a href="#" @click.prevent="loginHand">
-          <div class="hand"></div>
+      <div class="topcontainer">
+        <a href="#" @click.prevent="this.$router.back">
+          <div class="route" style="left:340px">
+            <i class="iconfont icon-xiangzuo_fanhui" :style="this.$store.state.color"></i>
+          </div>
         </a>
-        <div class="text">
-          <a href="#" @click.prevent="loginText">{{logintext}}</a>
+        <a href="#" @click.prevent="this.$router.forward">
+          <div class="route" style="left:400px">
+            <i class="iconfont icon-xiangyou_fanhui" :style="this.$store.state.color"></i>
+          </div>
+        </a>
+        <!-- 输入搜索框 -->
+        <div class="input">
+          <i class="iconfont icon-sousuo" :style="this.$store.state.color"></i>
+          <input
+            type="text"
+            placeholder="搜索"
+            v-model.lazy="search"
+            class
+            :style="this.$store.state.color"
+          />
+        </div>
+        <a href="#" @click.prevent>
+          <div class="listen">
+            <i class="iconfont icon-yuyin"></i>
+          </div>
+        </a>
+        <!-- 注册登录 -->
+        <!-- 基础图标功能 -->
+        <a href="#" @click.prevent>
+          <div class="listen">
+            <i class="iconfont icon-yuyin" :style="this.$store.state.color"></i>
+          </div>
+        </a>
+        <a href="#" @click.prevent="item.fn" v-for="item in Icon_top" :key="item.icon">
+          <div class="smallicontop" :style="item.left">
+            <i :class="item.icon" style="font-size:24px" :style="this.$store.state.color"></i>
+          </div>
+        </a>
+        <div class="login">
+          <a href="#" @click.prevent="loginHand">
+            <div class="hand"></div>
+          </a>
+          <div class="text">
+            <a href="#" @click.prevent="loginText">{{logintext}}</a>
+          </div>
         </div>
       </div>
-      <!-- 基础图标功能 -->
-      <a href="#" @click.prevent>
-        <div class="listen">
-          <i class="iconfont icon-yuyin"></i>
-        </div>
-      </a>
-      <a href="#" @click.prevent="item.fn" v-for="item in Icon_top" :key="item.icon">
-        <div class="smallicontop" :style="item.left">
-          <i :class="item.icon" style="font-size:24px"></i>
-        </div>
-      </a>
     </div>
     <!-- 侧边 -->
     <div class="sidebar">
@@ -112,10 +120,13 @@
         </div>
       </a>
     </div>
+    <!-- 音乐详细 -->
+    <detail />
   </div>
 </template>
 
 <script>
+import Detail from './components/detail.vue'
 import Login from './components/login.vue'
 import Music from './components/Music.vue'
 import Player from './components/player.vue'
@@ -199,7 +210,8 @@ export default {
           setTimeout(() => {
             tip.style.opacity = '1'
           }, 100)
-          tip.style.zIndex = '10'
+          tip.style.zIndex = '20'
+          tip.style.display = 'flex'
         }
       }, {
         icon: 'iconfont icon-zuidahua',
@@ -209,7 +221,8 @@ export default {
           setTimeout(() => {
             tip.style.opacity = '1'
           }, 100)
-          tip.style.zIndex = '10'
+          tip.style.zIndex = '20'
+          tip.style.display = 'flex'
         }
       }, {
         icon: 'iconfont icon-cuowuguanbiquxiao',
@@ -219,7 +232,8 @@ export default {
           setTimeout(() => {
             tip.style.opacity = '1'
           }, 100)
-          tip.style.zIndex = '10'
+          tip.style.zIndex = '20'
+          tip.style.display = 'flex'
         }
       }],
       isshow: false,
@@ -271,7 +285,8 @@ export default {
       const tip = document.getElementById('__tip__')
       tip.style.opacity = '0'
       setTimeout(() => {
-        tip.style.zIndex = '-10'
+        tip.style.zIndex = '-20'
+        tip.style.display = 'none'
       }, 300)
     },
     loginHand () {
@@ -295,7 +310,7 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login },
+  components: { tab, Player, Music, SongList, Login, Detail },
   mounted () {
     // const songlist = localStorage.getItem('songlist')
     // if (songlist === '') {
@@ -326,9 +341,17 @@ export default {
   height: 60px;
   background-color: #ec4141;
   position: absolute;
+  padding: 10px;
   inset: 0;
-  padding: 10px 10px;
   user-select: none;
+}
+.topcontainer {
+  width: 95%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 13;
+  left: 5%;
 }
 .bottom {
   width: calc(100% - 20px);
@@ -339,6 +362,7 @@ export default {
   bottom: 0;
   left: 0;
   padding: 10px 10px;
+  z-index: 15;
 }
 .sidebar {
   position: absolute;
@@ -531,7 +555,7 @@ export default {
   font-size: 26px;
   opacity: 0;
   transition: 0.3s all ease-in-out;
-  z-index: -10;
+  z-index: 20;
 }
 .tip button {
   position: absolute;
@@ -553,6 +577,7 @@ export default {
   top: 50%;
   transform: translateY(-50%);
   right: 18%;
+  z-index: 10;
 }
 .login .hand {
   height: 40px;
@@ -573,5 +598,8 @@ export default {
 .login .text a {
   color: #ccc;
   font-size: 16px;
+}
+input::-webkit-input-placeholder {
+  color: #999 !important;
 }
 </style>

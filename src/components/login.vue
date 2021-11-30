@@ -91,7 +91,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) translateX(-60px);
-  z-index: 10;
+  z-index: 21;
   border-radius: 20px;
   box-shadow: 5px 5px 10px #999;
   overflow: hidden;
