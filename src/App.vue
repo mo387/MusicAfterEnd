@@ -57,6 +57,7 @@
           </a>
           <div class="text">
             <a href="#" @click.prevent="loginText">{{logintext}}</a>
+            <imformation />
           </div>
         </div>
       </div>
@@ -127,6 +128,7 @@
 
 <script>
 import Detail from './components/detail.vue'
+import Imformation from './components/imformation.vue'
 import Login from './components/login.vue'
 import Music from './components/Music.vue'
 import Player from './components/player.vue'
@@ -297,6 +299,19 @@ export default {
     loginText () {
       if (!this.$store.state.islogin) {
         this.showlogin()
+      } else {
+        const imfo = document.getElementById('imformation')
+        if (imfo.style.opacity === '1') {
+          imfo.style.opacity = '0'
+          setTimeout(() => {
+            imfo.style.display = 'none'
+          }, 600)
+        } else {
+          imfo.style.display = 'block'
+          setTimeout(() => {
+            imfo.style.opacity = '1'
+          }, 10)
+        }
       }
     },
     showlogin () {
@@ -310,7 +325,7 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login, Detail },
+  components: { tab, Player, Music, SongList, Login, Detail, Imformation },
   mounted () {
     // const songlist = localStorage.getItem('songlist')
     // if (songlist === '') {

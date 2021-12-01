@@ -7,7 +7,9 @@
     <div class="top" ref="top">{{title}}</div>
     <div class="bottom_login" ref="login">
       <Input inputName="账号" class="margin" />
+      <span :style="{visibility: ifHasName}">该账号不存在</span>
       <Input inputName="密码" inputType="password" class="margin" />
+      <span>&nbsp;</span>
       <button class="button">登录</button>
       <div class="title">
         <a href="#" @click.prevent="toOther">还没有账号？立即注册</a>
@@ -15,8 +17,11 @@
     </div>
     <div class="bottom_register" ref="register">
       <Input inputName="账号" class="margin" />
+      <span :style="{visibility: ifHasName}">该账号已存在</span>
       <Input inputName="密码" inputType="password" class="margin" />
+      <span>&nbsp;</span>
       <Input inputName="重复密码" inputType="password" class="margin" />
+      <span :style="{visibility: ifHasName}">两次输入的密码不一致</span>
       <button class="button">注册</button>
       <div class="title">
         <a href="#" @click.prevent="toOther">已有账号，立即登录</a>
@@ -32,7 +37,8 @@ export default {
   data () {
     return {
       islogin: true,
-      title: '登录'
+      title: '登录',
+      ifHasName: 'hidden'
     }
   },
   methods: {
@@ -116,7 +122,7 @@ export default {
   z-index: -1;
 }
 .margin {
-  margin: 20px 0;
+  margin: 10px 0;
   transform: translateX(-10px);
 }
 .button {
@@ -156,5 +162,9 @@ export default {
   font-size: 32px;
   color: #999;
   font-weight: 600;
+}
+span {
+  color: red;
+  font-size: 12px;
 }
 </style>

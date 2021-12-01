@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "908780",
+      "name": "会员-b",
+      "font_class": "huiyuanb",
+      "unicode": "e6c4",
+      "unicode_decimal": 59076
+    },
+    {
+      "icon_id": "936715",
+      "name": "绑定设备",
+      "font_class": "bangdingshebei",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "2076258",
+      "name": "客服",
+      "font_class": "kefu",
+      "unicode": "e88f",
+      "unicode_decimal": 59535
+    },
+    {
+      "icon_id": "10232779",
+      "name": "商城",
+      "font_class": "shangcheng",
+      "unicode": "e78c",
+      "unicode_decimal": 59276
+    },
+    {
+      "icon_id": "15344290",
+      "name": "我的勋章",
+      "font_class": "wodexunzhang",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "17066673",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "17871724",
+      "name": "个人信息设置",
+      "font_class": "gerenxinxishezhi",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
       "icon_id": "4520334",
       "name": "下载",
       "font_class": "xiazai1",
