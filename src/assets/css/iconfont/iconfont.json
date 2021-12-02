@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1092152",
+      "name": "垃圾桶",
+      "font_class": "lajitong",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "1810268",
+      "name": "音符",
+      "font_class": "icon-test",
+      "unicode": "e6e0",
+      "unicode_decimal": 59104
+    },
+    {
+      "icon_id": "5954671",
+      "name": "歌手",
+      "font_class": "geshou",
+      "unicode": "e783",
+      "unicode_decimal": 59267
+    },
+    {
       "icon_id": "908780",
       "name": "会员-b",
       "font_class": "huiyuanb",

@@ -29,10 +29,13 @@
           <input
             type="text"
             placeholder="搜索"
-            v-model.lazy="search"
-            class
             :style="this.$store.state.color"
+            @focus="selectsong"
+            @blur="selectcomplite"
+            @input="inputsearch"
+            :value="this.$store.state.Searchcontent"
           />
+          <search-history />
         </div>
         <a href="#" @click.prevent>
           <div class="listen">
@@ -132,8 +135,11 @@ import Imformation from './components/imformation.vue'
 import Login from './components/login.vue'
 import Music from './components/Music.vue'
 import Player from './components/player.vue'
+import SearchHistory from './components/searchHistory.vue'
 import SongList from './components/songList.vue'
 import tab from './components/tab.vue'
+
+import debounce from './util/debounce'
 export default {
   data () {
     return {
@@ -247,6 +253,51 @@ export default {
     }
   },
   methods: {
+    selectsong (event) {
+      const searchHistory = document.getElementById('searchHistory')
+      setTimeout(() => {
+        searchHistory.style.opacity = '1'
+      }, 50)
+      searchHistory.style.display = 'block'
+      document.onkeydown = (e) => {
+        if (e.key === 'Enter' && this.$store.state.Searchcontent !== '') {
+          let url = this.$route.href
+          url = url.substr(url.lastIndexOf('/') + 1, url.length)
+          if (url !== 'selectsong') {
+            this.$router.push('/selectsong')
+          }
+          if (localStorage.getItem('historySelect') === null) {
+            let selectContent = [this.$store.state.Searchcontent]
+            console.log(selectContent)
+            selectContent = JSON.stringify(selectContent)
+            localStorage.setItem('historySelect', selectContent)
+          } else {
+            let selectContent = localStorage.getItem('historySelect')
+            selectContent = JSON.parse(selectContent)
+            selectContent.push(this.$store.state.Searchcontent)
+            selectContent = [...new Set(selectContent)]
+            localStorage.setItem('historySelect', JSON.stringify(selectContent))
+          }
+          event.target.blur()
+          document.onkeydown = undefined
+          searchHistory.style.opacity = '0'
+          setTimeout(() => {
+            searchHistory.style.display = 'none'
+          }, 600)
+        }
+      }
+    },
+    selectcomplite () {
+      const searchHistory = document.getElementById('searchHistory')
+      document.onkeydown = undefined
+      searchHistory.style.opacity = '0'
+      setTimeout(() => {
+        searchHistory.style.display = 'none'
+      }, 600)
+    },
+    inputsearch: debounce(function (e) {
+      this.$store.commit('set_content', e[0].target.value)
+    }),
     show () {
       this.opacity = 'opacity:1'
     },
@@ -325,8 +376,9 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login, Detail, Imformation },
+  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory },
   mounted () {
+    console.log(JSON.parse(localStorage.getItem('historySelect')))
     // const songlist = localStorage.getItem('songlist')
     // if (songlist === '') {
     //   localStorage.setItem('songlist', JSON.stringify([]))
@@ -563,7 +615,7 @@ export default {
   box-shadow: 5px 5px 10px #ccc;
   z-index: 100;
   border-radius: 20px;
-  display: flex;
+  display: none;
   align-items: center;
   flex-direction: column;
   padding-top: 100px;

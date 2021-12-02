@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+// 一级路由
 import blog from '../views/blog/blog.vue'
 import directSeeding from '../views/directSeeding/directSeeding.vue'
 import found from '../views/found/found.vue'
@@ -10,7 +11,10 @@ import recently from '../views/recently/recently.vue'
 import mymusic from '../views/mymusic/mymusic.vue'
 import myplayer from '../views/myplayer/myplayer.vue'
 import collect from '../views/collect/collect.vue'
+import selectsong from '../views/selectsong/selectsong.vue'
+// 二级路由
 import foundChild from './found.js'
+import selectSongChild from './selectsong.js'
 const routes = [
   {
     path: '/',
@@ -20,6 +24,13 @@ const routes = [
     name: 'blog',
     path: '/blog',
     component: blog
+  },
+  {
+    name: 'selectsong',
+    path: '/selectsong',
+    redirect: '/selectsong/song',
+    component: selectsong,
+    children: selectSongChild
   },
   {
     name: 'directSeeding',

@@ -3,14 +3,16 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     songindex: 0,
-    islogin: false,
+    islogin: true,
     songlist: [
       { songname: '可惜没如果', url: require('@/assets/music/勇气.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
       { songname: '醉赤壁', url: require('@/assets/music/锦鲤抄.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
       { songname: '瞬き（无对白）', url: require('@/assets/music/火力全开.mp3'), singer: '春茶', img: require('@/assets/image/temp.webp') },
       { songname: '关键词', url: require('@/assets/music/马步谣.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') }],
     color: 'color:#fff',
-    isplay: false
+    isplay: false,
+    Searchcontent: '',
+    Searchguess: { song: ['可惜不是你', '终于等到你'], singer: ['梁静茹', '林俊杰'] }
   },
   mutations: {
     set_song (state, payload) {
@@ -27,6 +29,9 @@ export default createStore({
     },
     set_play (state, payload) {
       state.isplay = payload
+    },
+    set_content (state, payload) {
+      state.Searchcontent = payload
     }
   },
   actions: {
