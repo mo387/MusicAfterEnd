@@ -1,48 +1,97 @@
-获取歌曲列表
-  参数列表
-    歌单Id
-  返回：
+//宇皓
+api/isRegisted
+参数：账号
+返回：true/false
+
+api/register
+参数：账号密码
+返回：true/false
+创建我喜欢得歌单
+
+api/login
+参数：账号密码
+返回：
+{
+   success:true,
+   songList:[](歌单id),
+   nickName:[]
+}
+{
+  success:false,
+  reason:[]
+}
+
+//世豪
+api/searchSong
+参数：
+关键词
+页数
+数量
+{
   {
-    songName:歌名
-    url:地址
-    singer:歌手
-    img:歌手图片
-  }
-
-注册
-  参数列表
-    账户
-    密码
-  返回
-    账号存在 ture
-    账号不存在：返回'注册成功'
-    插入表
-
-登录
-  账号密码
-返回
-    账号存在 ture
-    账号不存在：返回'登录成功'
-    返回歌单列表（api名称）
-      参数列表
-        账户
-      返回：
-      数组：装歌单的唯一标识
-
-搜索
-  参数
-  {
-    用户输入的关键字
-    页数
     数量
+    song[{
+      songName:'',
+      singerName:'',
+      imageUrl:''
+      musicUrl:''
+    }]
   }
-  返回
-  歌手名
-  歌名中
-  满足条件的结果列表
-  分页
+}
 
-歌单和其中歌曲的增删
+api/searchSinger
+参数：
+关键词
+页数
+数量
+{
+  {
+    数量
+    song[{
+      songName:'',
+      singerName:'',
+      imageUrl:''
+      musicUrl:''
+    }]
+  }
+}
+
+//文凯
+api/songWord
+参数：歌曲id
+返回
+{
+  success:true
+  songWord[{
+    word:歌词
+    time:[]
+  }]
+}
+{
+  success:false
+}
 
 
-
+//安军
+api/like
+参数：
+歌曲id
+用户id
+返回
+{
+  成功
+}
+{
+  失败
+}
+api/songList
+参数：歌单id
+返回值
+{
+  song[{
+    songName:'',
+    singerName:'',
+    imageUrl:''
+    musicUrl:''
+  }]
+}

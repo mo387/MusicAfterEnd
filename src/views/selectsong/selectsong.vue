@@ -6,6 +6,9 @@
         <router-link :to="item.url">{{item.name}}</router-link>
       </div>
     </div>
+    <div class="view">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -25,6 +28,7 @@ export default {
 .selectsong {
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 .title {
   width: calc(100% - 56px);
@@ -65,5 +69,10 @@ a {
   bottom: -10px;
   left: 0;
   border-radius: 4px;
+}
+.view {
+  width: 100%;
+  height: 82%;
+  margin-top: 4rem;
 }
 </style>
