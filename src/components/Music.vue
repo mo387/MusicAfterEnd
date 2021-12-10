@@ -47,6 +47,7 @@ export default {
   methods: {
     like () {
       if (this.love !== 'color: #ec4141') {
+        // 安军，在这部分发送网络请求，添加这首歌到喜欢的歌单
         this.love = 'color: #ec4141'
       } else {
         this.love = 'color: white;-webkit-text-stroke: 1px #000'
@@ -78,13 +79,13 @@ export default {
   },
   computed: {
     songname () {
-      return this.$store.state.songlist[this.$store.state.songindex].songname
+      return this.$store.state.playlist[this.$store.state.songindex].songname
     },
     singer () {
-      return this.$store.state.songlist[this.$store.state.songindex].singer
+      return this.$store.state.playlist[this.$store.state.songindex].singer
     },
     img () {
-      return this.$store.state.songlist[this.$store.state.songindex].img
+      return this.$store.state.playlist[this.$store.state.songindex].img
     }
   }
 }

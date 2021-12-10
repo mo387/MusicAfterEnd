@@ -79,6 +79,20 @@
         </tab>
       </router-link>
       <div class="text">创建的歌单</div>
+
+      <router-link to="/userSongList">
+        <tab
+          :content="item.content"
+          v-for="(item,index) in this.$store.state.songList"
+          :key="item"
+          :class="this.songListIndex!==index ? 'songList':''"
+          @click="chooseSongList(index)"
+        >
+          <template v-slot:icon>
+            <i class="iconfont icon-icon-test" style="font-size:22px"></i>
+          </template>
+        </tab>
+      </router-link>
     </div>
     <!-- 路由展示内容 -->
     <div class="view" ref="view">
@@ -90,7 +104,7 @@
     </div>
     <!-- 底部 -->
     <div class="bottom">
-      <player :playList="this.$store.state.songlist" />
+      <player :playList="this.$store.state.playlist" />
       <music />
       <a href="#" @click.prevent @mouseover.prevent>
         <div class="smallicon" style="right:140px">
@@ -139,7 +153,7 @@ import SearchHistory from './components/searchHistory.vue'
 import SongList from './components/songList.vue'
 import tab from './components/tab.vue'
 
-import debounce from './util/debounce'
+import debounce from './util/optimize/debounce'
 export default {
   data () {
     return {
@@ -249,7 +263,8 @@ export default {
       slide: 'height:73px',
       tip: 'opacity:0',
       listshow: '',
-      logintext: '您还未登录'
+      logintext: '您还未登录',
+      songListIndex: -1
     }
   },
   methods: {
@@ -372,13 +387,17 @@ export default {
         login.style.opacity = '1'
         login.style.transform = 'translate(-50%, -50%)'
       }, 50)
+    },
+    chooseSongList (index) {
+      this.songListIndex = index
+      console.log(this.songListIndex)
     }
   },
   watch: {
   },
   components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory },
   mounted () {
-    console.log(JSON.parse(localStorage.getItem('historySelect')))
+    // console.log(JSON.parse(localStorage.getItem('historySelect')))
     // const songlist = localStorage.getItem('songlist')
     // if (songlist === '') {
     //   localStorage.setItem('songlist', JSON.stringify([]))
@@ -388,7 +407,6 @@ export default {
     //   this.$store.commit('set_songlist', songlist)
     // }
   }
-
 }
 </script>
 <style scoped>
@@ -668,5 +686,10 @@ export default {
 }
 input::-webkit-input-placeholder {
   color: #999 !important;
+}
+.songList {
+  background-color: #fff !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
 }
 </style>

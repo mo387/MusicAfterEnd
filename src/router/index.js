@@ -12,9 +12,11 @@ import mymusic from '../views/mymusic/mymusic.vue'
 import myplayer from '../views/myplayer/myplayer.vue'
 import collect from '../views/collect/collect.vue'
 import selectsong from '../views/selectsong/selectsong.vue'
+import userSongList from '../views/userSongLIst/userSongList.vue'
 // 二级路由
 import foundChild from './found.js'
 import selectSongChild from './selectsong.js'
+import userSongListChild from './userSongList'
 const routes = [
   {
     path: '/',
@@ -83,6 +85,13 @@ const routes = [
     name: 'collect',
     path: '/collect',
     component: collect
+  },
+  {
+    name: 'userSongList',
+    path: '/userSongList',
+    redirect: '/userSongList/song',
+    component: userSongList,
+    children: userSongListChild
   }
 ]
 

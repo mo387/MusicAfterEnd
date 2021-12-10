@@ -38,4 +38,19 @@ a,a:active,a:visited,a:link,a:focus{
     text-decoration: none;
     user-select: none;
 }
-
+@keyframes circle {
+    from {
+      stroke-dashoffset: 597;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes tick {
+    from {
+      stroke-dashoffset: 165;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }

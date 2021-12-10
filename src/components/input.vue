@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;height:44px;">
-    <input :type="Type" :id="Title" class="input" placeholder=" " @input="Input" />
+    <input :type="Type" :id="Title" class="input" placeholder=" " />
     <label :for="Title" class="input_Label">{{Title}}</label>
     <slot name="icon" class="input_icon"></slot>
   </div>
@@ -24,6 +24,8 @@ export default {
   computed: {
     Title () { return this.inputName },
     Type () { return this.inputType }
+  },
+  methods: {
   }
 }
 </script>
