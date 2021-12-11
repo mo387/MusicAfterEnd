@@ -6,8 +6,8 @@
       <th style="width:31%;text-align:left">单曲名称</th>
       <th style="width:31%;text-align:left">歌手</th>
       <th style="width:31%;text-align:left">时长</th>
-      <tr v-for="index in 15" :key="index">
-        <td>1</td>
+      <tr v-for="(item,index) in songList" :key="item">
+        <td>{{index}}</td>
         <td>
           <a href="#">
             <i class="iconfont icon-woxihuande"></i>
@@ -45,13 +45,18 @@ export default {
   data () {
     return {
       currentpage: 1,
-      pageCount: 10
+      pageCount: 10,
+      songList: []
     }
   },
   computed: {
     ifcurrent (item) {
       return item === this.currentpage
     }
+  },
+  mounted () {
+    // this.$store.state.Searchcontent
+    // this.songList = 返回的结果
   }
 }
 </script>

@@ -65,6 +65,7 @@ export default {
       setTimeout(() => {
         this.$store.commit('set_color', 'color:#000')
       }, 600)
+      // 发送网络请求
     }
   },
   props: {
@@ -74,7 +75,8 @@ export default {
   },
   data () {
     return {
-      love: 'color: white;-webkit-text-stroke: 1px #000'
+      love: 'color: white;-webkit-text-stroke: 1px #000',
+      songWord: []
     }
   },
   computed: {
