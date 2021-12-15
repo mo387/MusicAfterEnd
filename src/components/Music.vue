@@ -53,7 +53,7 @@ export default {
         this.love = 'color: white;-webkit-text-stroke: 1px #000'
       }
     },
-    showdetail () {
+    async showdetail () {
       const front = document.getElementById('music_front')
       const back = document.getElementById('music_back')
       const detail = document.getElementById('detail')
@@ -66,6 +66,24 @@ export default {
         this.$store.commit('set_color', 'color:#000')
       }, 600)
       // 发送网络请求
+      // console.log('1')
+      const thissongindex = this.$store.state.songindex
+      // console.log(thissongindex)
+      const songID = this.$store.state.playlist[thissongindex].songID
+      // console.log(songID)
+      const parms = { songID: songID }
+      const songWordObj = await this.$http({ url: '/songWord', params: parms })
+      // console.log(songWordObj.data.songWord)// success
+      this.$store.commit('set_songWord', songWordObj.data.songWord)
+      const songWord = this.$store.state.songWord
+      console.log(songWord[1])// success
+      // eslint-disable-next-line camelcase
+      // const songWord_word = songWordObj.data.songWord[1].word
+      // eslint-disable-next-line camelcase
+      // const songWord_time = songWordObj.data.songWord[1].time
+      // console.log(songWord_word)
+      // console.log(songWord_time)
+      // const audio = document.getElementById('audio')
     }
   },
   props: {
