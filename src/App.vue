@@ -388,9 +388,16 @@ export default {
         login.style.transform = 'translate(-50%, -50%)'
       }, 50)
     },
-    chooseSongList (index) {
+    async chooseSongList (index) {
       this.songListIndex = index
-      console.log(this.songListIndex)
+      const IndexTosongList = this.$store.state.songList[index]
+      const SongListName = IndexTosongList.content
+      const SongListUser = IndexTosongList.userID
+      const parms = { listName: SongListName, userID: SongListUser }
+      const { data } = await this.$http({ url: '/songList', params: parms })
+      this.$store.commit('set_rightNowSongList', data)
+      // console.log(this.$store.state.rightNowSongList)
+      // console.log(data)
     }
   },
   watch: {
