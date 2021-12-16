@@ -1,0 +1,97 @@
+//宇皓
+api/isRegisted
+参数：账号
+返回：true/false
+
+api/register
+参数：账号密码
+返回：true/false
+创建我喜欢得歌单
+
+api/login
+参数：账号密码
+返回：
+{
+   success:true,
+   songList:[](歌单id),
+   nickName:[]
+}
+{
+  success:false,
+  reason:[]
+}
+
+//世豪
+api/searchSong
+参数：
+关键词
+页数
+数量
+{
+  {
+    数量
+    song[{
+      songName:'',
+      singerName:'',
+      imageUrl:''
+      musicUrl:''
+    }]
+  }
+}
+
+api/searchSinger
+参数：
+关键词
+页数
+数量
+{
+  {
+    数量
+    song[{
+      songName:'',
+      singerName:'',
+      imageUrl:''
+      musicUrl:''
+    }]
+  }
+}
+
+//文凯
+api/songWord
+参数：歌曲id
+返回
+{
+  success:true
+  songWord[{
+    word:歌词
+    time:[]
+  }]
+}
+{
+  success:false
+}
+
+
+//安军
+api/like
+参数：
+歌曲id
+用户id
+返回
+{
+  成功
+}
+{
+  失败
+}
+api/songList
+参数：歌单id
+返回值
+{
+  song[{
+    songName:'',
+    singerName:'',
+    imageUrl:''
+    musicUrl:''
+  }]
+}
