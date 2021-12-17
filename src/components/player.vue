@@ -191,6 +191,26 @@ export default {
           const currentMin = parseInt(current / 60)
           const currentStr = (currentMin >= 10 ? currentMin : '0' + currentMin) + ':' + (currrentSecond >= 10 ? currrentSecond : '0' + currrentSecond)
           this.current = currentStr
+          // 张文凯编写，当对应下标歌词对应的时间与此刻时间相等时把该歌词传入$store
+          const songWord = this.$store.state.songWord
+          for (var i = 1; i < songWord.length; i++) {
+            // eslint-disable-next-line camelcase
+            const songWord_timeMin = parseInt(this.$store.state.songWord[i].time.substring(0, 2), 10)
+            // eslint-disable-next-line camelcase
+            const songWord_timeSecond = parseInt(this.$store.state.songWord[i].time.substring(3, 5), 10)
+            // console.log('i=' + i)//success
+            // console.log(this.$store.state.songWord[i].time.substring(0, 2))//success
+            // console.log(this.$store.state.songWord[i].time.substring(3, 5))//success
+            // eslint-disable-next-line camelcase
+            if (songWord_timeMin === currentMin && songWord_timeSecond === currrentSecond) {
+              // console.log('1')
+              const currentSongWord = this.$store.state.songWord[i].word
+              this.$store.commit('set_currentsongWord', currentSongWord)
+              // console.log('2')
+              break
+            }
+          }
+          console.log(this.$store.state.currentsongWord)
         }
       }, 1000)
     })

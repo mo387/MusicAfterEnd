@@ -44,16 +44,60 @@
 
 <script>
 export default {
+  async mounted () {
+    const Songindex2 = this.$store.state.songindex
+    const UserID = this.$store.state.playlist[Songindex2].userID
+    const SongID = this.$store.state.playlist[Songindex2].songID
+    const parms2 = { userID: UserID, songID: SongID }
+    const { data } = await this.$http({
+      url: '/islike', params: parms2
+    })
+    console.log(data)
+    if (data.success === true) {
+      // 歌曲已添加至我的喜欢
+      this.love = 'color: #ec4141'
+    } else {
+      // 歌曲未添加至我的喜欢
+      this.love = 'color: white;-webkit-text-stroke: 1px #000'
+    }
+  },
   methods: {
-    like () {
+    async like () {
       if (this.love !== 'color: #ec4141') {
         // 安军，在这部分发送网络请求，添加这首歌到喜欢的歌单
-        this.love = 'color: #ec4141'
+        const Songindex = this.$store.state.songindex
+        const likeuserID = this.$store.state.playlist[Songindex].userID
+        const likesongID = this.$store.state.playlist[Songindex].songID
+        const parms = { userID: likeuserID, songID: likesongID }
+        const { data } = await this.$http({
+          url: '/like', params: parms
+        })
+        // console.log(data)
+        if (data.success === true) {
+          // 添加成功
+          this.love = 'color: #ec4141'
+        } else {
+          // 添加失败
+          this.love = 'color: white;-webkit-text-stroke: 1px #000'
+        }
       } else {
-        this.love = 'color: white;-webkit-text-stroke: 1px #000'
+        const Songindex1 = this.$store.state.songindex
+        const likeuserID1 = this.$store.state.playlist[Songindex1].userID
+        const likesongID1 = this.$store.state.playlist[Songindex1].songID
+        const parms1 = { userID: likeuserID1, songID: likesongID1 }
+        const { data } = await this.$http({
+          url: '/delelike', params: parms1
+        })
+        if (data.success === true) {
+          // 删除成功
+          this.love = 'color: white;-webkit-text-stroke: 1px #000'
+        } else {
+          // 删除失败
+          this.love = 'color: #ec4141'
+        }
       }
     },
-    showdetail () {
+    async showdetail () {
       const front = document.getElementById('music_front')
       const back = document.getElementById('music_back')
       const detail = document.getElementById('detail')
@@ -66,6 +110,24 @@ export default {
         this.$store.commit('set_color', 'color:#000')
       }, 600)
       // 发送网络请求
+      // console.log('1')
+      const thissongindex = this.$store.state.songindex
+      // console.log(thissongindex)
+      const songID = this.$store.state.playlist[thissongindex].songID
+      // console.log(songID)
+      const parms = { songID: songID }
+      const songWordObj = await this.$http({ url: '/songWord', params: parms })
+      // console.log(songWordObj.data.songWord)// success
+      this.$store.commit('set_songWord', songWordObj.data.songWord)
+      const songWord = this.$store.state.songWord
+      console.log(songWord[1])// success
+      // eslint-disable-next-line camelcase
+      // const songWord_word = songWordObj.data.songWord[1].word
+      // eslint-disable-next-line camelcase
+      // const songWord_time = songWordObj.data.songWord[1].time
+      // console.log(songWord_word)
+      // console.log(songWord_time)
+      // const audio = document.getElementById('audio')
     }
   },
   props: {

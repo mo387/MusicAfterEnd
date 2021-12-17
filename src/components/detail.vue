@@ -11,10 +11,12 @@
     </div>
     <div class="wordOfSong">
       <div class="title">
-        <div class="songname">接受</div>
-        <div class="singer">梁静茹</div>
+        <div class="songname">{{this.$store.state.playlist[this.$store.state.songindex].songname}}</div>
+        <div class="singer">{{this.$store.state.playlist[this.$store.state.songindex].singer}}</div>
       </div>
-      <div class="songword">1111</div>
+      <div class="songword">
+        <p v-for="(songWord) in this.$store.state.songWord" :key="songWord">{{songWord.word}}</p>
+      </div>
     </div>
     <div class="discuss">
       <div class="discussTitle">全部评论</div>

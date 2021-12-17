@@ -1,6 +1,7 @@
 <template>
   <div class="selectsong">
     <div class="title">找到{{this.$store.state.resultNum}}首单曲</div>
+
     <div class="link">
       <div class="single" v-for="item in link" :key="item.name">
         <router-link :to="item.url">{{item.name}}</router-link>
@@ -16,8 +17,10 @@
 export default {
   data () {
     return {
+
       link: [{ name: '单曲', url: 'song' }, { name: '歌手', url: 'singer' }],
       resultNum: 0
+
     }
   },
   mounted () {

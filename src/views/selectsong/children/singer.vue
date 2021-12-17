@@ -4,6 +4,7 @@
       <div class="sing" v-for="(item,index) in singerList" :key="item">
         <div class="head">{{index+1}}</div>
         <div class="name">{{item.singerName}}</div>
+
         <a href="#" class="link">
           <i class="iconfont">22222222</i>
         </a>
@@ -16,6 +17,7 @@
 <script>
 import page from '../../../components/page.vue'
 export default {
+
   components: { page },
   data () {
     return {
@@ -48,6 +50,7 @@ export default {
       // console.log(this.$store.state.resultNum)
     })
   }
+
 }
 </script>
 

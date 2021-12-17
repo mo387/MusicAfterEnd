@@ -8,6 +8,7 @@
       <th style="width:31%;text-align:left">时长</th>
       <tr v-for="(item,index) in songList" :key="item">
         <td>{{index+1}}</td>
+
         <td>
           <a href="#">
             <i class="iconfont icon-woxihuande"></i>
@@ -16,6 +17,7 @@
             <i class="iconfont icon-xiazai"></i>
           </a>
         </td>
+
         <td>{{item.songName}}</td>
         <td>{{item.singerName}}</td>
         <td>{{item.songTime}}</td>
