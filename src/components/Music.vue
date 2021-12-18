@@ -3,13 +3,13 @@
     <div class="front" id="music_front">
       <a href="#" @click.prevent="showdetail">
         <div class="pic">
-          <img :src="img" :alt="singer" />
+          <img :src="img" style="color:black" />
         </div>
       </a>
       <div class="title" @click.prevent="showdetail">
         <a href="#" class="name">{{songname}}</a>
         &nbsp;
-        <a href="#">
+        <a href="#" v-if="this.$store.state.playlist.length !== 0">
           <i class="iconfont icon-xihuan add" @click.stop="like" :style="love"></i>
         </a>
       </div>
@@ -45,20 +45,22 @@
 <script>
 export default {
   async mounted () {
-    const Songindex2 = this.$store.state.songindex
-    const UserID = this.$store.state.playlist[Songindex2].userID
-    const SongID = this.$store.state.playlist[Songindex2].songID
-    const parms2 = { userID: UserID, songID: SongID }
-    const { data } = await this.$http({
-      url: '/islike', params: parms2
-    })
-    console.log(data)
-    if (data.success === true) {
-      // 歌曲已添加至我的喜欢
-      this.love = 'color: #ec4141'
-    } else {
-      // 歌曲未添加至我的喜欢
-      this.love = 'color: white;-webkit-text-stroke: 1px #000'
+    if (this.$store.state.playlist.length !== 0) {
+      const Songindex2 = this.$store.state.songindex
+      const UserID = this.$store.state.userId
+      const SongID = this.$store.state.playlist[Songindex2].songID
+      const parms2 = { userID: UserID, songID: SongID }
+      const { data } = await this.$http({
+        url: '/islike', params: parms2
+      })
+      console.log(data)
+      if (data.success === true) {
+        // 歌曲已添加至我的喜欢
+        this.love = 'color: #ec4141'
+      } else {
+        // 歌曲未添加至我的喜欢
+        this.love = 'color: white;-webkit-text-stroke: 1px #000'
+      }
     }
   },
   methods: {
@@ -98,6 +100,11 @@ export default {
       }
     },
     async showdetail () {
+      const audio = document.getElementById('audio')
+      if (audio.source === undefined) {
+        this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
+        return
+      }
       const front = document.getElementById('music_front')
       const back = document.getElementById('music_back')
       const detail = document.getElementById('detail')
@@ -143,13 +150,17 @@ export default {
   },
   computed: {
     songname () {
-      return this.$store.state.playlist[this.$store.state.songindex].songname
+      return this.$store.state.playlist.length === 0 ? '暂无歌曲' : this.$store.state.playlist[this.$store.state.songindex].songname
     },
     singer () {
-      return this.$store.state.playlist[this.$store.state.songindex].singer
+      return this.$store.state.playlist.length === 0 ? '~赶紧找找自己喜欢的吧~' : this.$store.state.playlist[this.$store.state.songindex].songname
     },
     img () {
-      return this.$store.state.playlist[this.$store.state.songindex].img
+      if (this.$store.state.playlist.length === 0) {
+        return require('@/assets/image/wronglogo.png')
+      } else {
+        return this.$store.state.playlist[this.$store.state.songindex].img
+      }
     }
   }
 }

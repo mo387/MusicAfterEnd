@@ -11,8 +11,12 @@
     </div>
     <div class="wordOfSong">
       <div class="title">
-        <div class="songname">{{this.$store.state.playlist[this.$store.state.songindex].songname}}</div>
-        <div class="singer">{{this.$store.state.playlist[this.$store.state.songindex].singer}}</div>
+        <div
+          class="songname"
+        >{{this.$store.state.playlist.length === 0 ? '' : this.$store.state.playlist[this.$store.state.songindex].songname}}</div>
+        <div
+          class="singer"
+        >{{this.$store.state.playlist.length === 0 ? '' : this.$store.state.playlist[this.$store.state.songindex].singer}}</div>
       </div>
       <div class="songword">
         <p v-for="(songWord) in this.$store.state.songWord" :key="songWord">{{songWord.word}}</p>

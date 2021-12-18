@@ -140,6 +140,7 @@
     </div>
     <!-- 音乐详细 -->
     <detail />
+    <warm id="globalWarm" />
   </div>
 </template>
 
@@ -152,6 +153,7 @@ import Player from './components/player.vue'
 import SearchHistory from './components/searchHistory.vue'
 import SongList from './components/songList.vue'
 import tab from './components/tab.vue'
+import warm from './components/warm.vue'
 
 import debounce from './util/optimize/debounce'
 export default {
@@ -403,17 +405,16 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory },
+  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm },
   mounted () {
-    // console.log(JSON.parse(localStorage.getItem('historySelect')))
-    // const songlist = localStorage.getItem('songlist')
-    // if (songlist === '') {
-    //   localStorage.setItem('songlist', JSON.stringify([]))
-    // } else {
-    //   console.log('进来了')
-    //   console.log('有缓存')
-    //   this.$store.commit('set_songlist', songlist)
-    // }
+    let songlist = localStorage.getItem('songlist')
+    if (songlist === null) {
+      localStorage.setItem('songlist', JSON.stringify([]))
+    } else {
+      songlist = JSON.parse(songlist)
+      this.$store.commit('set_songlist', songlist)
+      console.log(this.$store.state.playlist, '=========')
+    }
   }
 }
 </script>

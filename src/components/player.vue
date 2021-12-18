@@ -38,6 +38,10 @@ export default {
   methods: {
     stop () {
       const audio = this.$refs.audio
+      if (audio.source === undefined) {
+        this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
+        return
+      }
       if (audio.paused) {
         audio.play()
         this.play = 'iconfont icon-24gf-pause2'
@@ -49,8 +53,12 @@ export default {
       }
     },
     next () {
-      this.play = 'iconfont icon-24gf-pause2'
       const audio = this.$refs.audio
+      if (audio.source === undefined) {
+        this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
+        return
+      }
+      this.play = 'iconfont icon-24gf-pause2'
       audio.pause()
       this.$store.commit('set_play', false)
       this.songindex = (this.songindex + 1) % this.playList.length
@@ -68,8 +76,12 @@ export default {
       clearInterval(this.strtimer)
     },
     last () {
-      this.play = 'iconfont icon-24gf-pause2'
       const audio = this.$refs.audio
+      if (audio.source === undefined) {
+        this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
+        return
+      }
+      this.play = 'iconfont icon-24gf-pause2'
       audio.pause()
       this.$store.commit('set_play', false)
       this.songindex = (this.songindex - 1 + this.playList.length) % this.playList.length
@@ -170,7 +182,11 @@ export default {
   },
   mounted () {
     const audio = this.$refs.audio
-    audio.src = this.playList[this.songindex].url
+    if (this.playList.length === 0) {
+      audio.src = ''
+    } else {
+      audio.src = this.playList[this.songindex].url
+    }
     audio.addEventListener('canplay', () => {
       const end = parseInt(audio.duration)
       const endSecond = parseInt(end % 60)
