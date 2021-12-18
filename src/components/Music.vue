@@ -101,7 +101,7 @@ export default {
     },
     async showdetail () {
       const audio = document.getElementById('audio')
-      if (audio.source === undefined) {
+      if (audio.src === undefined) {
         this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
         return
       }
@@ -153,7 +153,7 @@ export default {
       return this.$store.state.playlist.length === 0 ? '暂无歌曲' : this.$store.state.playlist[this.$store.state.songindex].songname
     },
     singer () {
-      return this.$store.state.playlist.length === 0 ? '~赶紧找找自己喜欢的吧~' : this.$store.state.playlist[this.$store.state.songindex].songname
+      return this.$store.state.playlist.length === 0 ? '~赶紧找找自己喜欢的吧~' : this.$store.state.playlist[this.$store.state.songindex].singer
     },
     img () {
       if (this.$store.state.playlist.length === 0) {

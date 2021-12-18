@@ -104,7 +104,7 @@
     </div>
     <!-- 底部 -->
     <div class="bottom">
-      <player :playList="this.$store.state.playlist" />
+      <player />
       <music />
       <a href="#" @click.prevent @mouseover.prevent>
         <div class="smallicon" style="right:140px">
@@ -407,14 +407,6 @@ export default {
   },
   components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm },
   mounted () {
-    let songlist = localStorage.getItem('songlist')
-    if (songlist === null) {
-      localStorage.setItem('songlist', JSON.stringify([]))
-    } else {
-      songlist = JSON.parse(songlist)
-      this.$store.commit('set_songlist', songlist)
-      console.log(this.$store.state.playlist, '=========')
-    }
   }
 }
 </script>

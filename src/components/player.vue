@@ -38,7 +38,7 @@ export default {
   methods: {
     stop () {
       const audio = this.$refs.audio
-      if (audio.source === undefined) {
+      if (audio.src === undefined) {
         this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
         return
       }
@@ -54,16 +54,16 @@ export default {
     },
     next () {
       const audio = this.$refs.audio
-      if (audio.source === undefined) {
+      if (audio.src === undefined) {
         this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
         return
       }
       this.play = 'iconfont icon-24gf-pause2'
       audio.pause()
       this.$store.commit('set_play', false)
-      this.songindex = (this.songindex + 1) % this.playList.length
+      this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
       this.$store.commit('set_song', this.songindex)
-      audio.src = this.playList[this.songindex].url
+      audio.src = this.$store.state.playlist[this.songindex].url
       this.init()
       audio.play()
       this.$store.commit('set_play', true)
@@ -77,15 +77,15 @@ export default {
     },
     last () {
       const audio = this.$refs.audio
-      if (audio.source === undefined) {
+      if (audio.src === undefined) {
         this.$tip.showWarm({ text: '暂无歌曲可播放哦~' })
         return
       }
       this.play = 'iconfont icon-24gf-pause2'
       audio.pause()
       this.$store.commit('set_play', false)
-      this.songindex = (this.songindex - 1 + this.playList.length) % this.playList.length
-      audio.src = this.playList[this.songindex].url
+      this.songindex = (this.songindex - 1 + this.$store.state.playlist.length) % this.$store.state.playlist.length
+      audio.src = this.$store.state.playlist[this.songindex].url
       this.$store.commit('set_song', this.songindex)
       this.init()
       audio.play()
@@ -97,9 +97,9 @@ export default {
       const first = function liexun () {
         const audio = this.$refs.audio
         this.init()
-        this.songindex = (this.songindex + 1) % this.playList.length
+        this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
         this.$store.commit('set_song', this.songindex)
-        audio.src = this.playList[this.songindex].url
+        audio.src = this.$store.state.playlist[this.songindex].url
         audio.play()
         this.$store.commit('set_play', true)
       }
@@ -113,23 +113,23 @@ export default {
         const audio = this.$refs.audio
         this.init()
         const temp = this.songindex
-        this.songindex = Math.floor(Math.random() * 1000) % this.playList.length
-        console.log(Math.floor(Math.random() * 1000) % this.playList.length)
+        this.songindex = Math.floor(Math.random() * 1000) % this.$store.state.playlist.length
+        console.log(Math.floor(Math.random() * 1000) % this.$store.state.playlist.length)
         if (this.songindex === temp) {
-          this.songindex = (this.songindex - 1 + this.playList.length) % this.playList.length
+          this.songindex = (this.songindex - 1 + this.$store.state.playlist.length) % this.$store.state.playlist.length
         }
         this.$store.commit('set_song', this.songindex)
-        audio.src = this.playList[this.songindex].url
+        audio.src = this.$store.state.playlist[this.songindex].url
         audio.play()
         this.$store.commit('set_play', true)
       }
       const forth = function lie () {
         const audio = this.$refs.audio
         this.init()
-        if (this.songindex < this.playList.length) {
-          this.songindex = (this.songindex + 1) % this.playList.length
+        if (this.songindex < this.$store.state.playlist.length) {
+          this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
           this.$store.commit('set_song', this.songindex)
-          audio.src = this.playList[this.songindex].url
+          audio.src = this.$store.state.playlist[this.songindex].url
           audio.play()
           this.$store.commit('set_play', true)
         }
@@ -174,18 +174,23 @@ export default {
     }
   },
   props: {
-    playList: {
-      type: Array
-    }
   },
   watch: {
   },
   mounted () {
+    let songlist = localStorage.getItem('songlist')
+    if (songlist === null) {
+      localStorage.setItem('songlist', JSON.stringify([]))
+    } else {
+      songlist = JSON.parse(songlist)
+      this.$store.commit('set_songlist', songlist)
+    }
+    console.log(this.$store.state.playlist.length)
     const audio = this.$refs.audio
-    if (this.playList.length === 0) {
+    if (this.$store.state.playlist.length === 0) {
       audio.src = ''
     } else {
-      audio.src = this.playList[this.songindex].url
+      audio.src = this.$store.state.playlist[this.$store.state.songindex].url
     }
     audio.addEventListener('canplay', () => {
       const end = parseInt(audio.duration)
@@ -237,8 +242,8 @@ export default {
     audio.onended = () => {
       const audio = document.getElementById('audio')
       this.init()
-      this.songindex = (this.songindex + 1) % this.playList.length
-      audio.src = this.playList[this.songindex].url
+      this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
+      audio.src = this.$store.state.playlist[this.songindex].url
       audio.play()
       this.$store.commit('set_play', true)
     }
