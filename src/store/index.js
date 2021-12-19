@@ -15,12 +15,7 @@ export default createStore({
     // 登陆状态
     islogin: false,
     // 播放列表
-    playlist: [
-
-      { userID: 1, songID: 3, songname: '可惜没如果', url: require('@/assets/music/勇气.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
-      { userID: 2, songID: 2, songname: '醉赤壁', url: require('@/assets/music/锦鲤抄.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') },
-      { userID: 3, songID: 3, songname: '瞬き（无对白）', url: require('@/assets/music/火力全开.mp3'), singer: '春茶', img: require('@/assets/image/temp.webp') },
-      { userID: 4, songID: 4, songname: '关键词', url: require('@/assets/music/马步谣.mp3'), singer: '林俊杰', img: require('@/assets/image/jj.webp') }],
+    playlist: [],
 
     color: 'color:#fff',
     isplay: false,
@@ -33,7 +28,9 @@ export default createStore({
     // 用户在歌单页面选择的页码
     pageIndex: 0,
     // 搜索结果数目
-    resultNum: 0
+    resultNum: 0,
+    // 用户id
+    userId: ''
   },
   mutations: {
     // payload就是调用时，传过来的参数
@@ -54,10 +51,10 @@ export default createStore({
       state.songindex = payload
     },
     set_songlist (state, payload) {
-      state.songlist = payload
+      state.playlist = payload
     },
     push_songlist (state, payload) {
-      state.songlist.push(payload)
+      state.playlist.push(payload)
     },
     set_color (state, payload) {
       state.color = payload
@@ -73,6 +70,9 @@ export default createStore({
     },
     set_result (state, payload) {
       state.resultNum = payload
+    },
+    set_userId (state, payload) {
+      state.userId = payload
     }
   },
   actions: {

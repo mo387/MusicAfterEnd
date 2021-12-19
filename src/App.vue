@@ -104,7 +104,7 @@
     </div>
     <!-- 底部 -->
     <div class="bottom">
-      <player :playList="this.$store.state.playlist" />
+      <player />
       <music />
       <a href="#" @click.prevent @mouseover.prevent>
         <div class="smallicon" style="right:140px">
@@ -140,6 +140,7 @@
     </div>
     <!-- 音乐详细 -->
     <detail />
+    <warm id="globalWarm" />
   </div>
 </template>
 
@@ -152,6 +153,7 @@ import Player from './components/player.vue'
 import SearchHistory from './components/searchHistory.vue'
 import SongList from './components/songList.vue'
 import tab from './components/tab.vue'
+import warm from './components/warm.vue'
 
 import debounce from './util/optimize/debounce'
 export default {
@@ -403,17 +405,8 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory },
+  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm },
   mounted () {
-    // console.log(JSON.parse(localStorage.getItem('historySelect')))
-    // const songlist = localStorage.getItem('songlist')
-    // if (songlist === '') {
-    //   localStorage.setItem('songlist', JSON.stringify([]))
-    // } else {
-    //   console.log('进来了')
-    //   console.log('有缓存')
-    //   this.$store.commit('set_songlist', songlist)
-    // }
   }
 }
 </script>
