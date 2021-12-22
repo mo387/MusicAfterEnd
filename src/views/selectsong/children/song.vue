@@ -6,7 +6,7 @@
       <th style="width:31%;text-align:left">单曲名称</th>
       <th style="width:31%;text-align:left">歌手</th>
       <th style="width:31%;text-align:left">时长</th>
-      <tr v-for="(item,index) in songList" :key="item">
+      <tr v-for="(item,index) in songList" :key="item" @dblclick="doubleclick(item)">
         <td>{{index+1}}</td>
 
         <td>
@@ -18,12 +18,12 @@
           </a>
         </td>
 
-        <td>{{item.songName}}</td>
-        <td>{{item.singerName}}</td>
+        <td>{{item.songName.replace('.mp3','')}}</td>
+        <td>{{item.imgUrl.substring(item.imgUrl.lastIndexOf('/') + 1, item.imgUrl.lastIndexOf('.'))}}</td>
         <td>{{item.songTime}}</td>
       </tr>
     </table>
-    <page />
+    <!-- <page style="position:absolute;bottom:30px" /> -->
     <!-- <div class="page">
       <div class="pagebox">
         <div class="single" @click="last">＜</div>
@@ -41,14 +41,13 @@
 </template>
 
 <script>
-import page from '../../../components/page.vue'
+// import page from '../../../components/page.vue'
 export default {
-  components: { page },
+  components: {},
   data () {
     return {
       currentpage: 1,
-      pageCount: 10,
-      songList: []
+      pageCount: 10
     }
   },
   computed: {
@@ -58,22 +57,17 @@ export default {
   },
   mounted () {
     // console.log(this.$store.state.Searchcontent)
-    this.$http.get('/searchSong',
-      {
-        params: {
-          keyword: this.$store.state.Searchcontent
-        }
-      }
-    ).then(res => {
-      console.log(res)
-      console.log(res.data.musicData)
-      this.songList = res.data.musicData
-      console.log(this.songList)
-      this.$store.state.pageIndex = res.data.page
-      // console.log(this.$store.state.pageIndex)
-      this.$store.state.resultNum = res.data.total
-      // console.log(this.$store.state.resultNum)
-    })
+    this.$public.searchSong(this)
+  },
+  methods: {
+    doubleclick (item) {
+      this.$store.commit('push_songlist', item)
+    }
+  },
+  props: {
+    songList: {
+      type: Array
+    }
   }
 }
 </script>
@@ -86,18 +80,17 @@ export default {
   padding: 0 4%;
   user-select: none;
 }
-.sidebar::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 6px;
   /*height: 4px;*/
 }
-.sidebar::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   border-radius: 10px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
   background: rgba(0, 0, 0, 0.1);
 }
 .table {
   width: 100%;
-  height: 88%;
   border: 0px solid;
   border-collapse: collapse;
 }
@@ -122,6 +115,9 @@ export default {
   line-height: 100%;
   width: 50%;
   float: left;
+}
+.table tr {
+  height: 2.4rem;
 }
 .page {
   width: 100%;

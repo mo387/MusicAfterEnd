@@ -7,8 +7,10 @@ import './assets/css/iconfont/iconfont.css'
 import axios from './plugins/axios/index'
 import optimize from './util/optimize/index'
 import tip from './util/tips/index'
+import basic from './util/public/index'
 const app = createApp(App)
 app.config.globalProperties.$http = axios
 app.config.globalProperties.$optimize = optimize
 app.config.globalProperties.$tip = tip
+app.config.globalProperties.$public = basic
 app.use(store).use(router).mount('#app')

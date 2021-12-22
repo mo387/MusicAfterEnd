@@ -1,146 +1,149 @@
 <template>
-  <div class="all">
-    <div class="tip" id="__tip__">
-      ~您真的舍得关掉我嘛~
-      <button>
-        <a href="#" @click="sure">不舍得</a>
-      </button>
-    </div>
-    <Login />
-    <!-- 顶部 -->
-    <div class="top">
-      <!-- logo -->
-      <img src="@\assets\image\musiclogo.png" class="image" />
-      <!-- 路由控制 -->
-      <div class="topcontainer">
-        <a href="#" @click.prevent="this.$router.back">
-          <div class="route" style="left:340px">
-            <i class="iconfont icon-xiangzuo_fanhui" :style="this.$store.state.color"></i>
-          </div>
-        </a>
-        <a href="#" @click.prevent="this.$router.forward">
-          <div class="route" style="left:400px">
-            <i class="iconfont icon-xiangyou_fanhui" :style="this.$store.state.color"></i>
-          </div>
-        </a>
-        <!-- 输入搜索框 -->
-        <div class="input">
-          <i class="iconfont icon-sousuo" :style="this.$store.state.color"></i>
-          <input
-            type="text"
-            placeholder="搜索"
-            :style="this.$store.state.color"
-            @focus="selectsong"
-            @blur="selectcomplite"
-            @input="inputsearch"
-            :value="this.$store.state.Searchcontent"
-          />
-          <search-history />
-        </div>
-        <a href="#" @click.prevent>
-          <div class="listen">
-            <i class="iconfont icon-yuyin"></i>
-          </div>
-        </a>
-        <!-- 注册登录 -->
-        <!-- 基础图标功能 -->
-        <a href="#" @click.prevent>
-          <div class="listen">
-            <i class="iconfont icon-yuyin" :style="this.$store.state.color"></i>
-          </div>
-        </a>
-        <a href="#" @click.prevent="item.fn" v-for="item in Icon_top" :key="item.icon">
-          <div class="smallicontop" :style="item.left">
-            <i :class="item.icon" style="font-size:24px" :style="this.$store.state.color"></i>
-          </div>
-        </a>
-        <div class="login">
-          <a href="#" @click.prevent="loginHand">
-            <div class="hand"></div>
+  <div id="app">
+    <div class="all">
+      <div class="tip" id="__tip__">
+        ~您真的舍得关掉我嘛~
+        <button>
+          <a href="#" @click="sure">不舍得</a>
+        </button>
+      </div>
+      <Login />
+      <!-- 顶部 -->
+      <div class="top">
+        <!-- logo -->
+        <img src="@\assets\image\musiclogo.png" class="image" />
+        <!-- 路由控制 -->
+        <div class="topcontainer">
+          <a href="#" @click.prevent="this.$router.back">
+            <div class="route" style="left:340px">
+              <i class="iconfont icon-xiangzuo_fanhui" :style="this.$store.state.color"></i>
+            </div>
           </a>
-          <div class="text">
-            <a href="#" @click.prevent="loginText">{{logintext}}</a>
-            <imformation />
+          <a href="#" @click.prevent="this.$router.forward">
+            <div class="route" style="left:400px">
+              <i class="iconfont icon-xiangyou_fanhui" :style="this.$store.state.color"></i>
+            </div>
+          </a>
+          <!-- 输入搜索框 -->
+          <div class="input">
+            <i class="iconfont icon-sousuo" :style="this.$store.state.color"></i>
+            <input
+              type="text"
+              placeholder="搜索"
+              :style="this.$store.state.color"
+              @focus="selectsong"
+              @blur="selectcomplite"
+              @input="inputsearch"
+              :value="this.$store.state.Searchcontent"
+            />
+            <search-history />
+          </div>
+          <a href="#" @click.prevent>
+            <div class="listen">
+              <i class="iconfont icon-yuyin"></i>
+            </div>
+          </a>
+          <!-- 注册登录 -->
+          <!-- 基础图标功能 -->
+          <a href="#" @click.prevent>
+            <div class="listen">
+              <i class="iconfont icon-yuyin" :style="this.$store.state.color"></i>
+            </div>
+          </a>
+          <a href="#" @click.prevent="item.fn" v-for="item in Icon_top" :key="item.icon">
+            <div class="smallicontop" :style="item.left">
+              <i :class="item.icon" style="font-size:24px" :style="this.$store.state.color"></i>
+            </div>
+          </a>
+          <div class="login">
+            <a href="#" @click.prevent="loginHand">
+              <div class="hand"></div>
+            </a>
+            <div class="text">
+              <a href="#" @click.prevent="loginText">{{logintext}}</a>
+              <imformation />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- 侧边 -->
-    <div class="sidebar">
-      <router-link v-for="item in Basic" :key="item" :to="item.route">
-        <tab :content="item.content" />
-      </router-link>
-      <div class="text">我的音乐</div>
-      <router-link v-for="item in User" :key="item" :to="item.route">
-        <tab :content="item.content">
-          <template v-slot:icon>
-            <i :class="item.icon" style="font-size:22px"></i>
-          </template>
-        </tab>
-      </router-link>
-      <div class="text">创建的歌单</div>
-      <!-- 歌单列表 -->
-      <router-link to="/userSongList">
-        <tab
-          :content="item.content"
-          v-for="(item,index) in this.$store.state.songList"
-          :key="item"
-          :class="this.songListIndex!==index ? 'songList':''"
-          @click="chooseSongList(index)"
-        >
-          <template v-slot:icon>
-            <i class="iconfont icon-icon-test" style="font-size:22px"></i>
-          </template>
-        </tab>
-      </router-link>
-    </div>
-    <!-- 路由展示内容 -->
-    <div class="view" ref="view">
-      <router-view></router-view>
-    </div>
-    <!-- 播放列表 -->
-    <div class="playlist" :style="listshow">
-      <song-list />
-    </div>
-    <!-- 底部 -->
-    <div class="bottom">
-      <player />
-      <music />
-      <a href="#" @click.prevent @mouseover.prevent>
-        <div class="smallicon" style="right:140px">
-          <i class="iconfont icon-yinxiao" style="font-size:24px;color:#666"></i>
-        </div>
-      </a>
-      <!-- 音量大小 -->
-      <div class="smallicon" style="right:100px" @mouseleave="hide">
-        <a href="#">
-          <i
-            class="iconfont icon-yinliang"
-            style="font-size:24px;color:#666"
-            @mouseover.prevent="show"
-          ></i>
+      <!-- 侧边 -->
+      <div class="sidebar">
+        <router-link v-for="item in Basic" :key="item" :to="item.route">
+          <tab :content="item.content" />
+        </router-link>
+        <div class="text">我的音乐</div>
+        <router-link v-for="item in User" :key="item" :to="item.route">
+          <tab :content="item.content">
+            <template v-slot:icon>
+              <i :class="item.icon" style="font-size:22px"></i>
+            </template>
+          </tab>
+        </router-link>
+        <div class="text">创建的歌单</div>
+        <!-- 歌单列表 -->
+        <router-link to="/userSongList">
+          <tab
+            :content="item.content"
+            v-for="(item,index) in this.$store.state.songList"
+            :key="item"
+            :class="this.songListIndex!==index ? 'songList':''"
+            @click="chooseSongList(index)"
+          >
+            <template v-slot:icon>
+              <i class="iconfont icon-icon-test" style="font-size:22px"></i>
+            </template>
+          </tab>
+        </router-link>
+      </div>
+      <!-- 路由展示内容 -->
+      <div class="view" ref="view">
+        <router-view></router-view>
+      </div>
+      <!-- 播放列表 -->
+      <div class="playlist" :style="listshow">
+        <song-list />
+      </div>
+      <!-- 底部 -->
+      <div class="bottom">
+        <player />
+        <music />
+        <a href="#" @click.prevent @mouseover.prevent>
+          <div class="smallicon" style="right:140px">
+            <i class="iconfont icon-yinxiao" style="font-size:24px;color:#666"></i>
+          </div>
         </a>
-        <div class="loud" :style="opacity">
-          <div class="slide">
-            <div class="slideout" :style="slide"></div>
-            <div class="cicle" @mousedown="move" ref="cicle"></div>
+        <!-- 音量大小 -->
+        <div class="smallicon" style="right:100px" @mouseleave="hide">
+          <a href="#">
+            <i
+              class="iconfont icon-yinliang"
+              style="font-size:24px;color:#666"
+              @mouseover.prevent="show"
+            ></i>
+          </a>
+          <div class="loud" :style="opacity">
+            <div class="slide">
+              <div class="slideout" :style="slide"></div>
+              <div class="cicle" @mousedown="move" ref="cicle"></div>
+            </div>
           </div>
         </div>
+        <a href="#" @click.prevent @mouseover.prevent>
+          <div class="smallicon" style="right:60px">
+            <i class="iconfont icon-shequn" style="font-size:24px;color:#666"></i>
+          </div>
+        </a>
+        <a href="#" @click.prevent="showlist" @mouseover.prevent>
+          <div class="smallicon" style="right:20px">
+            <i class="iconfont icon-24gf-playlist" style="font-size:24px;color:#666"></i>
+          </div>
+        </a>
       </div>
-      <a href="#" @click.prevent @mouseover.prevent>
-        <div class="smallicon" style="right:60px">
-          <i class="iconfont icon-shequn" style="font-size:24px;color:#666"></i>
-        </div>
-      </a>
-      <a href="#" @click.prevent="showlist" @mouseover.prevent>
-        <div class="smallicon" style="right:20px">
-          <i class="iconfont icon-24gf-playlist" style="font-size:24px;color:#666"></i>
-        </div>
-      </a>
+      <!-- 音乐详细 -->
+      <detail />
+      <warm id="globalWarm" />
     </div>
-    <!-- 音乐详细 -->
-    <detail />
-    <warm id="globalWarm" />
+    <song-word />
   </div>
 </template>
 
@@ -152,6 +155,7 @@ import Music from './components/Music.vue'
 import Player from './components/player.vue'
 import SearchHistory from './components/searchHistory.vue'
 import SongList from './components/songList.vue'
+import SongWord from './components/songWord.vue'
 import tab from './components/tab.vue'
 import warm from './components/warm.vue'
 
@@ -301,6 +305,7 @@ export default {
           setTimeout(() => {
             searchHistory.style.display = 'none'
           }, 600)
+          this.$public.searchSong(this)
         }
       }
     },
@@ -405,22 +410,29 @@ export default {
   },
   watch: {
   },
-  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm },
+  components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm, SongWord },
   mounted () {
   }
 }
 </script>
 <style scoped>
+.app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
 /* 整体 */
 .all {
   width: 80vw;
-  height: 100vh;
-  position: relative;
+  height: 100%;
+  position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%);
   box-shadow: 5px 5px 10px #ddd, -5px -5px 10px #ddd;
   border-radius: 5px;
   overflow: hidden;
+  background-color: #fff;
 }
 .top {
   width: calc(100% - 20px);

@@ -118,23 +118,7 @@ export default {
       }, 600)
       // 发送网络请求
       // console.log('1')
-      const thissongindex = this.$store.state.songindex
-      // console.log(thissongindex)
-      const songID = this.$store.state.playlist[thissongindex].songID
-      // console.log(songID)
-      const parms = { songID: songID }
-      const songWordObj = await this.$http({ url: '/songWord', params: parms })
-      // console.log(songWordObj.data.songWord)// success
-      this.$store.commit('set_songWord', songWordObj.data.songWord)
-      const songWord = this.$store.state.songWord
-      console.log(songWord[1])// success
-      // eslint-disable-next-line camelcase
-      // const songWord_word = songWordObj.data.songWord[1].word
-      // eslint-disable-next-line camelcase
-      // const songWord_time = songWordObj.data.songWord[1].time
-      // console.log(songWord_word)
-      // console.log(songWord_time)
-      // const audio = document.getElementById('audio')
+      this.$public.getSongWord(this)
     }
   },
   props: {
@@ -150,17 +134,21 @@ export default {
   },
   computed: {
     songname () {
-      return this.$store.state.playlist.length === 0 ? '暂无歌曲' : this.$store.state.playlist[this.$store.state.songindex].songname
+      this.$public.getSongWord(this)
+      return this.$store.state.playlist.length === 0 ? '暂无歌曲' : this.$store.state.playlist[this.$store.state.songindex].songName.replace('.mp3', '')
     },
     singer () {
-      return this.$store.state.playlist.length === 0 ? '~赶紧找找自己喜欢的吧~' : this.$store.state.playlist[this.$store.state.songindex].singer
+      if (this.$store.state.playlist.length !== 0) {
+        const singer = this.$store.state.playlist[this.$store.state.songindex].imgUrl
+        return singer.substring(singer.lastIndexOf('/') + 1, singer.lastIndexOf('.'))
+      } else {
+        return '~赶紧找找自己喜欢的吧~'
+      }
+
+      // singer.substring(singer.lastIndexOf('/'), singer.lastIndexOf('.'))
     },
     img () {
-      if (this.$store.state.playlist.length === 0) {
-        return require('@/assets/image/wronglogo.png')
-      } else {
-        return this.$store.state.playlist[this.$store.state.songindex].img
-      }
+      return this.$store.state.playlist.length === 0 ? '' : require(`@/assets/image/${this.$store.state.playlist[this.$store.state.songindex].imgUrl.substring(this.$store.state.playlist[this.$store.state.songindex].imgUrl.lastIndexOf('/') + 1)}`)
     }
   }
 }
@@ -250,6 +238,7 @@ export default {
   position: absolute;
   left: 74px;
   font-size: 20px;
+  white-space: nowrap;
 }
 .singer {
   top: 30px;

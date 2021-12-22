@@ -8,13 +8,23 @@
       </div>
     </div>
     <div class="view">
-      <router-view />
+      <song
+        :songList="this.$store.state.SearchSong"
+        v-show="this.$route.path.substring(this.$route.path.lastIndexOf('/'))==='/song'"
+      />
+      <singer
+        :singerList="this.$store.state.SearchSinger"
+        v-show="this.$route.path.substring(this.$route.path.lastIndexOf('/'))==='/singer'"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import song from './children/song.vue'
+import singer from './children/singer.vue'
 export default {
+  components: { song, singer },
   data () {
     return {
 
@@ -22,8 +32,6 @@ export default {
       resultNum: 0
 
     }
-  },
-  mounted () {
   }
 }
 </script>

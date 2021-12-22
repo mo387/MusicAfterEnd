@@ -27,8 +27,8 @@
       <div class="current">{{current}}</div>
       <div class="end">{{end}}</div>
     </div>
-    <div class="slide_forward" :style="{width:wid}"></div>
-    <audio ref="audio" id="audio">
+    <div class="slide_forward" :style="{width:this.wid}"></div>
+    <audio ref="audio" id="audio" :src="song" @error="next">
       <source />
     </audio>
   </div>
@@ -63,7 +63,6 @@ export default {
       this.$store.commit('set_play', false)
       this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
       this.$store.commit('set_song', this.songindex)
-      audio.src = this.$store.state.playlist[this.songindex].url
       this.init()
       audio.play()
       this.$store.commit('set_play', true)
@@ -74,6 +73,45 @@ export default {
       this.strtime = 0
       clearInterval(this.timer)
       clearInterval(this.strtimer)
+      this.$store.commit('set_songWordIndex', 0)
+    },
+    setTime () {
+      const audio = document.getElementById('audio')
+      this.timer = setInterval(() => {
+        const rate = parseFloat(((audio.currentTime + 1) / audio.duration) * 100).toFixed(2) + '%'
+        this.wid = rate
+      }, 1000)
+      this.strtimer = setInterval(() => {
+        if (!audio.paused) {
+          this.strtime++
+          const current = this.strtime
+          const currrentSecond = parseInt(current % 60)
+          const currentMin = parseInt(current / 60)
+          const currentStr = (currentMin >= 10 ? currentMin : '0' + currentMin) + ':' + (currrentSecond >= 10 ? currrentSecond : '0' + currrentSecond)
+          this.current = currentStr
+          // 张文凯编写，当对应下标歌词对应的时间与此刻时间相等时把该歌词传入$store
+          const songWord = this.$store.state.songWord
+          for (let i = 1; i < songWord.length; i++) {
+            // eslint-disable-next-line camelcase
+            const songWord_timeMin = parseInt(this.$store.state.songWord[i].time.substring(0, 2), 10)
+            // eslint-disable-next-line camelcase
+            const songWord_timeSecond = parseInt(this.$store.state.songWord[i].time.substring(3, 5), 10)
+            // console.log('i=' + i)//success
+            // console.log(this.$store.state.songWord[i].time.substring(0, 2))//success
+            // console.log(this.$store.state.songWord[i].time.substring(3, 5))//success
+            // eslint-disable-next-line camelcase
+            if (songWord_timeMin === currentMin && songWord_timeSecond === currrentSecond) {
+              // console.log('1')
+              const currentSongWord = this.$store.state.songWord[i].word
+              this.$store.commit('set_currentsongWord', currentSongWord)
+              this.$store.commit('set_songWordIndex', i)
+              // console.log('2')
+              break
+            }
+          }
+          console.log(this.$store.state.currentsongWord)
+        }
+      }, 1000)
     },
     last () {
       const audio = this.$refs.audio
@@ -85,7 +123,6 @@ export default {
       audio.pause()
       this.$store.commit('set_play', false)
       this.songindex = (this.songindex - 1 + this.$store.state.playlist.length) % this.$store.state.playlist.length
-      audio.src = this.$store.state.playlist[this.songindex].url
       this.$store.commit('set_song', this.songindex)
       this.init()
       audio.play()
@@ -99,7 +136,6 @@ export default {
         this.init()
         this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
         this.$store.commit('set_song', this.songindex)
-        audio.src = this.$store.state.playlist[this.songindex].url
         audio.play()
         this.$store.commit('set_play', true)
       }
@@ -119,7 +155,6 @@ export default {
           this.songindex = (this.songindex - 1 + this.$store.state.playlist.length) % this.$store.state.playlist.length
         }
         this.$store.commit('set_song', this.songindex)
-        audio.src = this.$store.state.playlist[this.songindex].url
         audio.play()
         this.$store.commit('set_play', true)
       }
@@ -129,7 +164,6 @@ export default {
         if (this.songindex < this.$store.state.playlist.length) {
           this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
           this.$store.commit('set_song', this.songindex)
-          audio.src = this.$store.state.playlist[this.songindex].url
           audio.play()
           this.$store.commit('set_play', true)
         }
@@ -171,7 +205,11 @@ export default {
   computed: {
     that () {
       return this
+    },
+    song () {
+      return this.$store.state.playlist.length === 0 ? '' : require(`@/assets/music/${this.$store.state.playlist[this.$store.state.songindex].songName}`)
     }
+
   },
   props: {
   },
@@ -193,58 +231,30 @@ export default {
       audio.src = this.$store.state.playlist[this.$store.state.songindex].url
     }
     audio.addEventListener('canplay', () => {
+      this.init()
       const end = parseInt(audio.duration)
       const endSecond = parseInt(end % 60)
       const endMin = parseInt(end / 60)
       const endStr = (endMin >= 10 ? endMin : '0' + endMin) + ':' + (endSecond >= 10 ? endSecond : '0' + endSecond)
       this.end = endStr
+      if (!audio.paused) {
+        this.play = 'iconfont icon-24gf-pause2'
+      }
+      audio.play()
+      this.$store.commit('set_play', true)
     })
     audio.addEventListener('play', () => {
-      this.timer = setInterval(() => {
-        const rate = parseFloat(((audio.currentTime + 1) / audio.duration) * 100).toFixed(2) + '%'
-        this.wid = rate
-      }, 1000)
-      this.strtimer = setInterval(() => {
-        if (!audio.paused) {
-          this.strtime++
-          const current = this.strtime
-          const currrentSecond = parseInt(current % 60)
-          const currentMin = parseInt(current / 60)
-          const currentStr = (currentMin >= 10 ? currentMin : '0' + currentMin) + ':' + (currrentSecond >= 10 ? currrentSecond : '0' + currrentSecond)
-          this.current = currentStr
-          // 张文凯编写，当对应下标歌词对应的时间与此刻时间相等时把该歌词传入$store
-          const songWord = this.$store.state.songWord
-          for (var i = 1; i < songWord.length; i++) {
-            // eslint-disable-next-line camelcase
-            const songWord_timeMin = parseInt(this.$store.state.songWord[i].time.substring(0, 2), 10)
-            // eslint-disable-next-line camelcase
-            const songWord_timeSecond = parseInt(this.$store.state.songWord[i].time.substring(3, 5), 10)
-            // console.log('i=' + i)//success
-            // console.log(this.$store.state.songWord[i].time.substring(0, 2))//success
-            // console.log(this.$store.state.songWord[i].time.substring(3, 5))//success
-            // eslint-disable-next-line camelcase
-            if (songWord_timeMin === currentMin && songWord_timeSecond === currrentSecond) {
-              // console.log('1')
-              const currentSongWord = this.$store.state.songWord[i].word
-              this.$store.commit('set_currentsongWord', currentSongWord)
-              // console.log('2')
-              break
-            }
-          }
-          console.log(this.$store.state.currentsongWord)
-        }
-      }, 1000)
+      this.setTime()
+      this.play = 'iconfont icon-24gf-pause2'
     })
     audio.addEventListener('pause', () => {
       clearInterval(this.timer)
       clearInterval(this.strtimer)
     })
     audio.onended = () => {
-      const audio = document.getElementById('audio')
       this.init()
-      this.songindex = (this.songindex + 1) % this.$store.state.playlist.length
-      audio.src = this.$store.state.playlist[this.songindex].url
-      audio.play()
+      console.log('播放结束')
+      this.next()
       this.$store.commit('set_play', true)
     }
   }

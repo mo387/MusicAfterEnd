@@ -2,53 +2,47 @@
   <div class="singer">
     <div class="box">
       <div class="sing" v-for="(item,index) in singerList" :key="item">
-        <div class="head">{{index+1}}</div>
+        <div class="head">
+          <img :src="img(index)" alt />
+        </div>
         <div class="name">{{item.singerName}}</div>
-
         <a href="#" class="link">
           <i class="iconfont">22222222</i>
         </a>
       </div>
     </div>
-    <page />
+    <!-- <page /> -->
   </div>
 </template>
 
 <script>
-import page from '../../../components/page.vue'
+// import page from '../../../components/page.vue'
 export default {
 
-  components: { page },
+  components: {},
   data () {
     return {
       currentpage: 1,
-      pageCount: 10,
-      singerList: []
+      pageCount: 10
     }
   },
   computed: {
     ifcurrent (item) {
       return item === this.currentpage
+    },
+    img () {
+      return (index) => {
+        return require(`@/assets/image/${this.singerList[index].singerHeadUrl.substring(this.singerList[index].singerHeadUrl.lastIndexOf('\\') + 1)}`)
+      }
     }
   },
   mounted () {
-    // console.log(this.$store.state.Searchcontent)
-    this.$http.get('/searchSinger',
-      {
-        params: {
-          keyword: this.$store.state.Searchcontent
-        }
-      }
-    ).then(res => {
-      console.log(res)
-      console.log(res.data.singerData)
-      this.singerList = res.data.singerData
-      console.log(this.singerList)
-      // this.$store.state.pageIndex = res.data.page
-      // console.log(this.$store.state.pageIndex)
-      // this.$store.state.resultNum = res.data.total
-      // console.log(this.$store.state.resultNum)
-    })
+    this.$public.searchSinger(this)
+  },
+  props: {
+    singerList: {
+      type: Array
+    }
   }
 
 }
@@ -87,6 +81,10 @@ export default {
   border: 1px solid #333;
   border-radius: 5px;
   overflow: hidden;
+}
+.head img {
+  width: 60px;
+  height: 60px;
 }
 .name {
   margin-left: 20px;

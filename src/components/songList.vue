@@ -3,17 +3,24 @@
     <div class="top">
       <div class="left">
         <span class="leftTop">当前播放</span>
-        <span class="leftBottom">共{{num}}首</span>
+        <span class="leftBottom">共{{this.$store.state.playlist.length}}首</span>
       </div>
       <div class="right">
         <div class="rightBottom">
           <a href="#">收藏全部</a>
-          <a href="#" style="color:#5c88d9">清空列表</a>
+          <a href="#" style="color:#5c88d9" @click="Delete">清空列表</a>
         </div>
       </div>
     </div>
     <div class="list">
-      <singlesong />
+      <a href="#">
+        <singlesong
+          v-for="(item,index) in this.$store.state.playlist"
+          :singlesong="item"
+          :key="item"
+          :songindex="index"
+        />
+      </a>
     </div>
   </div>
 </template>
@@ -27,6 +34,14 @@ export default {
   data () {
     return {
       num: 0
+    }
+  },
+  methods: {
+    Delete () {
+      console.log(222)
+      localStorage.setItem('songlist', JSON.stringify([]))
+      this.$store.commit('set_songlist', [])
+      this.$store.commit('set_song', 0)
     }
   }
 }

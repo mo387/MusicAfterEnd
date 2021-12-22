@@ -30,13 +30,41 @@ export default createStore({
     // 搜索结果数目
     resultNum: 0,
     // 用户id
-    userId: ''
+    userId: '',
+    songWordTimer: null,
+    songWordIndex: 0,
+    SearchSong: [],
+    SearchSinger: []
   },
   mutations: {
+    set_SearchSong (state, payload) {
+      state.SearchSong = payload
+    },
+    set_SearchSinger (state, payload) {
+      state.SearchSinger = payload
+    },
+    set_songWordIndex (state, payload) {
+      if (state.currentsongWord === '') {
+        return
+      }
+      state.songWordIndex = payload
+    },
     // payload就是调用时，传过来的参数
     // 张文凯添加的方法
     set_currentsongWord (state, payload) {
       state.currentsongWord = payload
+      const songword = document.getElementById('songword')
+      const single = document.getElementById(state.songWordIndex)
+      console.log(single)
+      const scrollTop = songword.scrollTop
+      const offsetTop = single.offsetTop - 250
+      setTimeout(() => {
+        clearInterval(state.songWordTimer)
+      }, 320)
+      state.songWordTimer = setInterval(() => {
+        songword.scrollTop += Math.round((offsetTop - scrollTop) / 16)
+      }, 20)
+      // songword.scrollTop = single.offsetTop - 250
     },
     set_songID (state, payload) {
       state.songID = payload
@@ -54,7 +82,22 @@ export default createStore({
       state.playlist = payload
     },
     push_songlist (state, payload) {
-      state.playlist.push(payload)
+      let songlist = localStorage.getItem('songlist')
+      songlist = JSON.parse(songlist)
+      let flag = false
+      for (let i = 0; i < state.playlist.length; i++) {
+        if (songlist[i].songName === payload.songName) {
+          flag = true
+          state.songindex = i
+          break
+        }
+      }
+      if (!flag) {
+        songlist.push(payload)
+        state.playlist.push(payload)
+        state.songindex = state.playlist.length - 1
+        localStorage.setItem('songlist', JSON.stringify(songlist))
+      }
     },
     set_color (state, payload) {
       state.color = payload

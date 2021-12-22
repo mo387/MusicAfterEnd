@@ -6,20 +6,21 @@
     <div class="redioback"></div>
     <div :class="{ani:this.$store.state.isplay,redio:true}">
       <div class="pic">
-        <img src="@/assets/image/1.jpeg" alt />
+        <img :src="img" alt />
       </div>
     </div>
     <div class="wordOfSong">
       <div class="title">
-        <div
-          class="songname"
-        >{{this.$store.state.playlist.length === 0 ? '' : this.$store.state.playlist[this.$store.state.songindex].songname}}</div>
-        <div
-          class="singer"
-        >{{this.$store.state.playlist.length === 0 ? '' : this.$store.state.playlist[this.$store.state.songindex].singer}}</div>
+        <div class="songname">{{songname}}</div>
+        <div class="singer">{{singer}}</div>
       </div>
-      <div class="songword">
-        <p v-for="(songWord) in this.$store.state.songWord" :key="songWord">{{songWord.word}}</p>
+      <div class="songword" id="songword">
+        <p
+          v-for="(songWord,index) in this.$store.state.songWord"
+          :key="songWord"
+          :class="{current:current(index),word:true,position:true}"
+          :id="index"
+        >{{songWord.word}}</p>
       </div>
     </div>
     <div class="discuss">
@@ -48,6 +49,28 @@ export default {
   data () {
     return {
       isAni: true
+    }
+  },
+  computed: {
+    img () {
+      return this.$store.state.playlist.length === 0 ? '' : require(`@/assets/image/${this.$store.state.playlist[this.$store.state.songindex].imgUrl.substring(this.$store.state.playlist[this.$store.state.songindex].imgUrl.lastIndexOf('/') + 1)}`)
+    },
+    songname () {
+      console.log('编号改变了')
+      return this.$store.state.playlist.length === 0 ? '暂无歌曲' : this.$store.state.playlist[this.$store.state.songindex].songName.replace('.mp3', '')
+    },
+    singer () {
+      if (this.$store.state.playlist.length !== 0) {
+        const singer = this.$store.state.playlist[this.$store.state.songindex].imgUrl
+        return singer.substring(singer.lastIndexOf('/') + 1, singer.lastIndexOf('.'))
+      } else {
+        return '~赶紧找找自己喜欢的吧~'
+      }
+    },
+    current () {
+      return (index) => {
+        return this.$store.state.songWordIndex === index
+      }
     }
   }
 }
@@ -183,5 +206,12 @@ export default {
   100% {
     transform: rotate(360deg);
   }
+}
+.current {
+  font-size: 20px;
+  font-weight: 600;
+}
+.word {
+  transition: 0.4s all ease-in-out;
 }
 </style>
