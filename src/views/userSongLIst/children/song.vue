@@ -6,33 +6,45 @@
       <th style="width:31%;text-align:left">单曲名称</th>
       <th style="width:31%;text-align:left">歌手</th>
       <th style="width:31%;text-align:left">时长</th>
-      <tr v-for="(item,index) in this.$store.state.rightNowSongList.song" :key="item">
+      <tr v-for="(item,index) in songlist" :key="item" @dblclick="add(item)">
         <td>{{index+1}}</td>
         <td>
           <a href="#">
-            <i class="iconfont icon-woxihuande"></i>
+            <i class="iconfont icon-xihuan" :style="like"></i>
           </a>
           <a href="#">
             <i class="iconfont icon-xiazai"></i>
           </a>
         </td>
-        <td style="height:100px">{{item.songName}}</td>
-        <td style="height:100px">{{item.singerName}}</td>
+        <td>{{item.songName.replace('.mp3','')}}</td>
+        <td>{{item.singerName}}</td>
         <td>3</td>
       </tr>
     </table>
-    <page />
+    <!-- <page /> -->
   </div>
 </template>
 
 <script>
-import page from '../../../components/page.vue'
+// import page from '../../../components/page.vue'
 export default {
-  components: { page },
+  // components: { page },
   mounted () {
     // const SongListContent = this.$store.state.rightNowSongList
+  },
+  computed: {
+    songlist () {
+      return this.$store.state.rightNowSongList.song
+    },
+    like () {
+      return this.$store.state.rightNowSongListName === 'Myfavouriteee' ? 'color: #ec4141' : 'color: white;-webkit-text-stroke: 1px #000'
+    }
+  },
+  methods: {
+    add (item) {
+      this.$store.commit('push_songlist', item)
+    }
   }
-
 }
 </script>
 
@@ -55,7 +67,6 @@ export default {
 }
 .table {
   width: 100%;
-  height: 86%;
   border: 0px solid;
   border-collapse: collapse;
 }
@@ -68,6 +79,10 @@ export default {
 }
 .table tr:hover {
   background-color: rgb(240, 240, 240);
+}
+.table tr {
+  height: 2rem;
+  line-height: 2rem;
 }
 .table th {
   height: 2rem;

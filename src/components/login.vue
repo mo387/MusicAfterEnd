@@ -6,9 +6,9 @@
     <img src="@/assets/image/bg.png" alt class="bg" />
     <div class="top" ref="top">{{title}}</div>
     <div class="bottom_login" ref="login">
-      <Input inputName="账号" class="margin" />
+      <Input inputName="账号" class="margin" @input="loginCheckName" />
       <span :style="{visibility: ifHasName}">该账号不存在</span>
-      <Input inputName="密码" inputType="password" class="margin" />
+      <Input inputName="密码" inputType="password" class="margin" @input="loginCheckPassword" />
       <span>&nbsp;</span>
       <a href="#">
         <div class="button" @click="success">登录</div>
@@ -33,6 +33,8 @@
     </div>
     <waiting id="loginWaiting" />
     <success id="loginSuccess" />
+    <check @success="canHttp" />
+    <warm id="loginWarm" />
   </div>
 </template>
 
@@ -41,22 +43,74 @@ import Input from './input.vue'
 import debounce from '../util/optimize/debounce'
 import Waiting from './waiting.vue'
 import Success from './success.vue'
+import Warm from './warm.vue'
+import Check from './check.vue'
 export default {
-  components: { Input, Waiting, Success },
+  components: { Input, Waiting, Success, Warm, Check },
   data () {
     return {
       islogin: true,
       title: '登录',
       ifHasName: 'hidden',
+      ifHasNamelogin: 'hidden',
       ifPassWord: 'hidden',
       registeName: '',
+      loginName: '',
+      loginPassword: '',
       registePassWord: '',
-      registeRePassWord: ''
+      registeRePassWord: '',
+      loginflag: false
     }
   },
   methods: {
-    success () {
-      this.$tip.showSuccess('loginSuccess')
+    async canHttp () {
+      if (this.loginflag) {
+        return
+      }
+      this.loginflag = true
+      const { data } = await this.$http.get('/login', {
+        params: {
+          userAccountThis: this.loginName,
+          userPasswordThis: this.loginPassword
+        }
+      })
+      console.log(data)
+      if (data.success) {
+        const list = []
+        for (let i = 0; i < data.listName.length; i++) {
+          list.push({ content: data.listName[i] })
+        }
+        this.$store.commit('set_songList', list)
+        console.log(this.$store.state.songList)
+        this.$store.commit('set_userId', data.ID)
+        console.log(this.$store.state.userId)
+        this.$store.commit('set_isLogin', true)
+        this.$store.commit('set_userNickName', data.NickName)
+        this.$store.commit('set_userHeadUrl', data.userHeadUrl)
+        this.$tip.showSuccess('loginSuccess')
+        this.loginflag = false
+        setTimeout(async () => { this.close() }, 1000)
+      }
+      if (!data.success) {
+        this.$tip.showWarm({ id: 'loginWarm', text: data.reson })
+        console.log('登陆失败')
+        this.loginflag = false
+      }
+    },
+    async success () {
+      if (this.loginName === '') {
+        this.$tip.showWarm({ id: 'loginWarm', text: '请输入用户名' })
+        return
+      }
+      if (this.loginPassword === '') {
+        this.$tip.showWarm({ id: 'loginWarm', text: '请输入密码' })
+        return
+      }
+      const check = document.getElementById('checkAll')
+      check.style.display = 'block'
+      setTimeout(() => {
+        check.style.opacity = '1'
+      }, 10)
     },
     toOther () {
       if (this.islogin) {
@@ -100,10 +154,28 @@ export default {
         login.style.transform = 'translate(-50%, -50%) translateX(-60px)'
       }, 500)
     },
+    loginCheckPassword: debounce(async function (e) {
+      this.loginPassword = e[0].target.value
+    }, 500),
+    loginCheckName: debounce(async function (e) {
+      this.loginName = e[0].target.value
+      const { data } = await this.$http.get('/isRegisted', {
+        params: {
+          userAccountThis: this.loginName
+        }
+      })
+      if (data.success === true) {
+        this.ifHasNamelogin = 'hidden'
+      } else {
+        this.ifHasNamelogin = 'visible'
+      }
+    }, 500),
     registeCheckName: debounce(async function (e) {
       this.registeName = e[0].target.value
       const { data } = await this.$http.get('/isRegisted', {
-        userAccountThis: this.registeName
+        params: {
+          userAccountThis: this.registeName
+        }
       })
       if (data.success === true) {
         this.ifHasName = 'visible'
@@ -111,21 +183,45 @@ export default {
         this.ifHasName = 'hidden'
       }
     }, 500),
-    registePassWordInput: debounce(function (e) { this.registePassWord = e[0].target.value }, 500),
+    registePassWordInput: debounce(function (e) { this.registePassword = e[0].target.value }, 500),
     registeRePasswordInput: debounce(function (e) {
-      this.registeRePassWord = e[0].target.value
-      if (this.registePassWord !== this.registeRePassWord) {
+      this.registeRePassword = e[0].target.value
+      if (this.registePassword !== this.registeRePassword) {
         this.ifPassWord = 'visible'
       } else {
         this.ifPassWord = 'hidden'
       }
     }, 250),
     async registe () {
-      console.log(1)
-      this.$tip.showWaiting('loginWaiting')
-      setTimeout(() => {
-        this.$tip.hideWaiting('loginWaiting')
-      }, 3000)
+      if (this.ifPassWord === 'hidden') {
+        this.$tip.showWaiting('loginWaiting')
+        const { data } = await this.$http.get('/registe', {
+          params: {
+            userAccountThis: this.registeName,
+            userPasswordThis: this.registePassword
+          }
+        })
+        if (data.success) {
+          this.$tip.hideWaiting('loginWaiting')
+          this.$tip.showSuccess('loginSuccess')
+        } else {
+          this.$tip.hideWaiting('loginWaiting')
+          this.$tip.showWarm({ id: 'loginWarm', text: data.result })
+        }
+        setTimeout(async () => {
+          this.$tip.hideWaiting('loginWaiting')
+          const { data2 } = await this.$http.get('/isRegisted', {
+            params: {
+              userAccountThis: this.registeName
+            }
+          })
+          if (!(data2.success)) {
+            this.$tip.showWarm({ id: 'loginWarm', text: '注册失败' })
+          }
+        }, 3000)
+      } else {
+        this.$tip.showWarm({ id: 'loginWarm', text: '密码不一致' })
+      }
       // const parms = {
       //   userAccountThis: this.registeName,
       //   userPasswordThis: this.registePassWord

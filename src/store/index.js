@@ -23,20 +23,35 @@ export default createStore({
     Searchcontent: '',
     Searchguess: { song: ['可惜不是你', '终于等到你'], singer: ['梁静茹', '林俊杰'] },
     // 当前用户的歌单
-    songList: [{ content: '日语' }, { content: '我喜欢的' }, { content: '海龟汤' }, { content: '惩罚' }],
+    songList: [],
+    rightNowSongListName: '',
     rightNowSongList: [],
     // 用户在歌单页面选择的页码
     pageIndex: 0,
     // 搜索结果数目
     resultNum: 0,
+    singerNum: 0,
     // 用户id
     userId: '',
+    // 宇皓加的用户昵称
+    userNickName: '',
+    // 宇皓加的用户头像
+    userHeadUrl: '',
     songWordTimer: null,
     songWordIndex: 0,
     SearchSong: [],
     SearchSinger: []
   },
   mutations: {
+    set_rightNowSongListName (state, payload) {
+      state.rightNowSongListName = payload
+    },
+    set_singerNum (state, payload) {
+      state.singerNum = payload
+    },
+    set_Searchguess (state, payload) {
+      state.Searchguess = payload
+    },
     set_SearchSong (state, payload) {
       state.SearchSong = payload
     },
@@ -116,6 +131,18 @@ export default createStore({
     },
     set_userId (state, payload) {
       state.userId = payload
+    },
+    set_isLogin (state, payload) {
+      state.islogin = payload
+    },
+    set_userNickName (state, payload) {
+      state.userNickName = payload
+    },
+    set_userHeadUrl (state, payload) {
+      state.userHeadUrl = payload
+    },
+    set_songList (state, payload) {
+      state.songList = payload
     }
   },
   actions: {

@@ -1,7 +1,13 @@
 <template>
   <div class="selectsong">
-    <div class="title">找到{{this.$store.state.resultNum}}首单曲</div>
-
+    <div
+      class="title"
+      v-show="this.$route.path.substring(this.$route.path.lastIndexOf('/'))==='/song'"
+    >找到{{this.$store.state.resultNum}}首单曲</div>
+    <div
+      class="title"
+      v-show="this.$route.path.substring(this.$route.path.lastIndexOf('/'))==='/singer'"
+    >找到{{this.$store.state.singerNum}}位歌手</div>
     <div class="link">
       <div class="single" v-for="item in link" :key="item.name">
         <router-link :to="item.url">{{item.name}}</router-link>

@@ -1,8 +1,10 @@
 <template>
   <div class="userSongList">
-    <div class="pic"></div>
+    <div class="pic">
+      <img :src="img" alt />
+    </div>
     <div class="tabbar">
-      <router-link to="song">歌手</router-link>
+      <router-link to="song">歌曲</router-link>
     </div>
     <div class="routerView">
       <router-view />
@@ -12,7 +14,11 @@
 
 <script>
 export default {
-
+  computed: {
+    img () {
+      return this.$store.state.rightNowSongList.length === 0 ? '' : require(`@/assets/image/${this.$store.state.rightNowSongList.song[0].imgUrl.substring(this.$store.state.rightNowSongList.song[0].imgUrl.lastIndexOf('/') + 1)}`)
+    }
+  }
 }
 </script>
 
@@ -28,7 +34,10 @@ export default {
   position: absolute;
   top: 30px;
   left: 30px;
-  background-color: #000;
+}
+.pic img {
+  width: 10vw;
+  height: 10vw;
 }
 .tabbar {
   position: absolute;

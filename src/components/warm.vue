@@ -24,5 +24,6 @@ export default {
   border-radius: 10px;
   color: white;
   transition: 0.4s all ease-in-out;
+  z-index: 100;
 }
 </style>

@@ -269,7 +269,6 @@ export default {
       slide: 'height:73px',
       tip: 'opacity:0',
       listshow: '',
-      logintext: '您还未登录',
       songListIndex: -1
     }
   },
@@ -308,6 +307,7 @@ export default {
           this.$public.searchSong(this)
         }
       }
+      this.$store.commit('set_content', event.target.value)
     },
     selectcomplite () {
       const searchHistory = document.getElementById('searchHistory')
@@ -317,8 +317,10 @@ export default {
         searchHistory.style.display = 'none'
       }, 600)
     },
-    inputsearch: debounce(function (e) {
+    inputsearch: debounce(async function (e) {
       this.$store.commit('set_content', e[0].target.value)
+      const { data } = await this.$http('/guess', { params: { keyword: e[0].target.value } })
+      this.$store.commit('set_Searchguess', data)
     }),
     show () {
       this.opacity = 'opacity:1'
@@ -400,10 +402,12 @@ export default {
       this.songListIndex = index
       const IndexTosongList = this.$store.state.songList[index]
       const SongListName = IndexTosongList.content
-      const SongListUser = IndexTosongList.userID
+      const SongListUser = this.$store.state.userId
       const parms = { listName: SongListName, userID: SongListUser }
       const { data } = await this.$http({ url: '/songList', params: parms })
+      this.$store.commit('set_rightNowSongListName', SongListName)
       this.$store.commit('set_rightNowSongList', data)
+      console.log(this.$store.state.rightNowSongList)
       // console.log(this.$store.state.rightNowSongList)
       // console.log(data)
     }
@@ -411,7 +415,30 @@ export default {
   watch: {
   },
   components: { tab, Player, Music, SongList, Login, Detail, Imformation, SearchHistory, warm, SongWord },
-  mounted () {
+  async mounted () {
+    const { data } = await this.$http('/islogin')
+    if (data.success) {
+      const list = []
+      for (let i = 0; i < data.listName.length; i++) {
+        list.push({ content: data.listName[i] })
+      }
+      this.$store.commit('set_songList', list)
+      console.log(this.$store.state.songList)
+      this.$store.commit('set_userId', data.ID)
+      console.log(this.$store.state.userId)
+      this.$store.commit('set_isLogin', true)
+      this.$store.commit('set_userNickName', data.NickName)
+      this.$store.commit('set_userHeadUrl', data.userHeadUrl)
+    }
+    if (!data.success) {
+      this.$tip.showWarm({ id: 'loginWarm', text: data.reson })
+      console.log('登陆失败')
+    }
+  },
+  computed: {
+    logintext () {
+      return this.$store.state.islogin ? this.$store.state.userNickName + ',欢迎您' : '您还未登录'
+    }
   }
 }
 </script>

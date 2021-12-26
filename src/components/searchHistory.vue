@@ -17,7 +17,7 @@
     <div v-else class="searchcontent">
       搜“
       <span style="color:blue">{{this.$store.state.Searchcontent}}</span>”的相关结果
-      <div class="guesstitle">
+      <div class="guesstitle" v-show="this.$store.state.Searchguess.song.length !== 0">
         <i class="iconfont icon-icon-test"></i>歌曲
       </div>
       <a href="#">
@@ -28,7 +28,7 @@
           @click="intoValue(item)"
         >{{item}}</div>
       </a>
-      <div class="guesstitle">
+      <div class="guesstitle" v-show="this.$store.state.Searchguess.singer.length !== 0">
         <i class="iconfont icon-geshou"></i>歌手
       </div>
       <a href="#">
@@ -69,6 +69,7 @@ export default {
       if (url !== 'selectsong') {
         this.$router.push('/selectsong')
       }
+      this.$public.searchSong(this)
     },
     DeleteAll () {
       this.history = []
