@@ -70,6 +70,7 @@ export default {
         this.$router.push('/selectsong')
       }
       this.$public.searchSong(this)
+      this.$public.searchSinger(this)
     },
     DeleteAll () {
       this.history = []
