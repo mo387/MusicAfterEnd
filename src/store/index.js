@@ -21,7 +21,7 @@ export default createStore({
     isplay: false,
     // 用户搜索框输入的东西
     Searchcontent: '',
-    Searchguess: { song: ['可惜不是你', '终于等到你'], singer: ['梁静茹', '林俊杰'] },
+    Searchguess: {},
     // 当前用户的歌单
     songList: [],
     rightNowSongListName: '',

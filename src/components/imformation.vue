@@ -57,7 +57,7 @@
           <i class="iconfont icon-xiangyou_fanhui"></i>
         </div>
       </a>
-      <a href="#">
+      <a href="#" @click.prevent="loginout">
         <div class="single">
           <i class="iconfont icon-tuichu"></i>
           <div>退出</div>
@@ -70,7 +70,12 @@
 
 <script>
 export default {
-
+  methods: {
+    loginout () {
+      console.log(1)
+      document.cookie = 'username=""'
+    }
+  }
 }
 </script>
 
